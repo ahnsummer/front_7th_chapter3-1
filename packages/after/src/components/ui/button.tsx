@@ -1,60 +1,141 @@
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline-block leading-1.5 border border-solid rounded-sm cursor-pointer whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
-        outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
+        primary: "bg-primary text-white hover:bg-primary/90",
+        secondary: "bg-secondary text-gray-600 hover:bg-secondary/80",
+        danger: "bg-danger text-white hover:bg-danger/90",
+        success: "bg-success text-white hover:bg-success/90",
+        info: "bg-info text-white hover:bg-info/90",
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        icon: "size-9",
-        "icon-sm": "size-8",
-        "icon-lg": "size-10",
+        sm: "px-3 py-1.5 text-sm",
+        md: "px-5 py-2.5 text-base",
+        lg: "px-6 py-3 text-lg",
+      },
+      fullWidth: {
+        true: "w-full",
+        false: "",
       },
     },
     defaultVariants: {
-      variant: "default",
-      size: "default",
+      variant: "primary",
+      size: "md",
+      fullWidth: false,
     },
   }
-)
+);
+
+type ButtonProps = React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+  } & {
+    fullWidth?: boolean;
+    entityType?: "user" | "post";
+    action?: "create" | "edit" | "delete" | "publish" | "archive";
+    entity?: any; // 엔티티 객체를 직접 받음
+  };
 
 function Button({
   className,
   variant,
   size,
   asChild = false,
+  disabled,
+  fullWidth,
+  children,
+  type = "button",
+  entityType,
+  action,
+  entity,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
-  const Comp = asChild ? Slot : "button"
+}: ButtonProps) {
+  const Comp = asChild ? Slot : "button";
+
+  // 🚨 Bad Practice: UI 컴포넌트가 비즈니스 규칙을 판단함
+  let actualDisabled = disabled;
+  let actualVariant = variant;
+  let actualChildren = children;
+
+  if (entityType && action && entity) {
+    // 비즈니스 규칙: 관리자는 삭제 불가
+    if (
+      entityType === "user" &&
+      action === "delete" &&
+      entity.role === "admin"
+    ) {
+      actualDisabled = true;
+    }
+
+    // 비즈니스 규칙: 이미 게시된 글은 게시 버튼 비활성화
+    if (
+      entityType === "post" &&
+      action === "publish" &&
+      entity.status === "published"
+    ) {
+      actualDisabled = true;
+    }
+
+    // 비즈니스 규칙: 게시된 글만 보관 가능
+    if (
+      entityType === "post" &&
+      action === "archive" &&
+      entity.status !== "published"
+    ) {
+      actualDisabled = true;
+    }
+
+    // 자동 label 생성
+    if (!children) {
+      if (action === "create") {
+        actualChildren = `새 ${
+          entityType === "user" ? "사용자" : "게시글"
+        } 만들기`;
+      } else if (action === "edit") {
+        actualChildren = "수정";
+      } else if (action === "delete") {
+        actualChildren = "삭제";
+      } else if (action === "publish") {
+        actualChildren = "게시";
+      } else if (action === "archive") {
+        actualChildren = "보관";
+      }
+    }
+
+    // action에 따라 variant 자동 결정
+    if (action === "delete") {
+      actualVariant = "danger";
+    } else if (action === "publish") {
+      actualVariant = "success";
+    } else if (action === "archive") {
+      actualVariant = "secondary";
+    }
+  }
 
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  )
+      disabled={actualDisabled}
+      type={type}
+      className={cn(
+        buttonVariants({
+          variant: actualVariant,
+          size,
+          className,
+          fullWidth,
+        })
+      )}
+      {...props}>
+      {actualChildren}
+    </Comp>
+  );
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };
