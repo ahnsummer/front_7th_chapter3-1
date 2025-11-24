@@ -125,7 +125,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const displayError = error || internalError;
 
     return (
-      <div>
+      <div className="grid gap-2">
         {label && (
           <Label htmlFor={name} required={required}>
             {label}
