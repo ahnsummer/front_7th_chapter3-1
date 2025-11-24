@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Alert, Table, Modal } from "../components/organisms";
-import { FormInput, FormSelect, FormTextarea } from "../components/molecules";
+import { FormSelect, FormTextarea } from "../components/molecules";
+import { Input } from "../components/ui/input";
 import { userService } from "../services/userService";
 import { postService } from "../services/postService";
 import type { User } from "../services/userService";
@@ -535,7 +536,7 @@ export const ManagementPage: React.FC = () => {
         <div>
           {entityType === "user" ? (
             <>
-              <FormInput
+              <Input
                 name="username"
                 value={formData.username || ""}
                 onChange={(value) =>
@@ -547,7 +548,7 @@ export const ManagementPage: React.FC = () => {
                 width="full"
                 fieldType="username"
               />
-              <FormInput
+              <Input
                 name="email"
                 value={formData.email || ""}
                 onChange={(value) => setFormData({ ...formData, email: value })}
@@ -596,7 +597,7 @@ export const ManagementPage: React.FC = () => {
             </>
           ) : (
             <>
-              <FormInput
+              <Input
                 name="title"
                 value={formData.title || ""}
                 onChange={(value) => setFormData({ ...formData, title: value })}
@@ -612,7 +613,7 @@ export const ManagementPage: React.FC = () => {
                   gridTemplateColumns: "1fr 1fr",
                   gap: "16px",
                 }}>
-                <FormInput
+                <Input
                   name="author"
                   value={formData.author || ""}
                   onChange={(value) =>
@@ -692,7 +693,7 @@ export const ManagementPage: React.FC = () => {
 
           {entityType === "user" ? (
             <>
-              <FormInput
+              <Input
                 name="username"
                 value={formData.username || ""}
                 onChange={(value) =>
@@ -704,7 +705,7 @@ export const ManagementPage: React.FC = () => {
                 width="full"
                 fieldType="username"
               />
-              <FormInput
+              <Input
                 name="email"
                 value={formData.email || ""}
                 onChange={(value) => setFormData({ ...formData, email: value })}
@@ -753,7 +754,7 @@ export const ManagementPage: React.FC = () => {
             </>
           ) : (
             <>
-              <FormInput
+              <Input
                 name="title"
                 value={formData.title || ""}
                 onChange={(value) => setFormData({ ...formData, title: value })}
@@ -769,7 +770,7 @@ export const ManagementPage: React.FC = () => {
                   gridTemplateColumns: "1fr 1fr",
                   gap: "16px",
                 }}>
-                <FormInput
+                <Input
                   name="author"
                   value={formData.author || ""}
                   onChange={(value) =>
