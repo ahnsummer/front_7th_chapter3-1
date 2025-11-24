@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
   {
     variants: {
       variant: {
@@ -21,12 +21,12 @@ const badgeVariants = cva(
         info: "border-transparent bg-info text-info-foreground hover:bg-info/80",
       },
       size: {
-        sm: "px-1 py-0.5 text-sm",
-        md: "px-2 py-1 text-base",
-        lg: "px-2.5 py-1.5 text-lg",
+        sm: "px-1 py-0.5 text-xs",
+        md: "px-1.5 py-0.5 text-sm",
+        lg: "px-2 py-1 text-md",
       },
       pill: {
-        true: "rounded-xl",
+        true: "rounded-full",
         false: "",
       },
     },
@@ -58,8 +58,10 @@ function Badge({
   priority,
   paymentStatus,
   status,
+  showIcon,
   ...props
 }: BadgeProps) {
+  void showIcon; // 미구현이지만 DOM 전달 방지
   let actualType = variant;
   let actualContent = children;
 

@@ -12,7 +12,7 @@ describe("Badge", () => {
     it("기본값으로 primary variant와 md size를 적용한다", () => {
       render(<Badge>기본</Badge>);
       const badge = screen.getByText("기본");
-      expect(badge).toHaveClass("bg-primary", "px-2", "py-1", "text-base");
+      expect(badge).toHaveClass("bg-primary", "px-1.5", "py-0.5", "text-sm");
     });
 
     it("pill이 false일 때 rounded-xl 클래스를 적용하지 않는다", () => {
@@ -42,26 +42,26 @@ describe("Badge", () => {
     it("size가 sm일 때 작은 크기를 적용한다", () => {
       render(<Badge size="sm">뱃지</Badge>);
       const badge = screen.getByText("뱃지");
-      expect(badge).toHaveClass("px-1", "py-0.5", "text-sm");
+      expect(badge).toHaveClass("px-1", "py-0.5", "text-xs");
     });
 
     it("size가 md일 때 중간 크기를 적용한다", () => {
       render(<Badge size="md">뱃지</Badge>);
       const badge = screen.getByText("뱃지");
-      expect(badge).toHaveClass("px-2", "py-1", "text-base");
+      expect(badge).toHaveClass("px-1.5", "py-0.5", "text-sm");
     });
 
     it("size가 lg일 때 큰 크기를 적용한다", () => {
       render(<Badge size="lg">뱃지</Badge>);
       const badge = screen.getByText("뱃지");
-      expect(badge).toHaveClass("px-2.5", "py-1.5", "text-lg");
+      expect(badge).toHaveClass("px-2", "py-1", "text-md");
     });
   });
 
   describe("pill prop", () => {
     it("pill이 true일 때 rounded-xl 클래스를 적용한다", () => {
       render(<Badge pill={true}>뱃지</Badge>);
-      expect(screen.getByText("뱃지")).toHaveClass("rounded-xl");
+      expect(screen.getByText("뱃지")).toHaveClass("rounded-full");
     });
   });
 
@@ -213,13 +213,13 @@ describe("Badge", () => {
         </Badge>
       );
       const badge = screen.getByText("게시");
-      expect(badge).toHaveClass("bg-success", "rounded-xl");
+      expect(badge).toHaveClass("bg-success", "rounded-full");
     });
 
     it("userRole, size, pill을 함께 사용할 수 있다", () => {
       render(<Badge userRole="admin" size="lg" pill />);
       const badge = screen.getByText("관리자");
-      expect(badge).toHaveClass("bg-danger", "px-2.5", "rounded-xl");
+      expect(badge).toHaveClass("bg-danger", "px-2", "rounded-full");
     });
 
     it("여러 semantic prop이 동시에 있으면 variant는 마지막 것이 우선되지만 content는 첫 번째 것이 유지된다", () => {
