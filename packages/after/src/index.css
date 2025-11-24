@@ -5,6 +5,15 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --color-primary: #1976d2
+  --color-secondary: #dddddd
+  --color-success: #2e7d32
+  --color-danger: #d32f2f
+  --color-warning: #f57c00
+  --color-info: #0288d1
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
