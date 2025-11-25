@@ -41,7 +41,7 @@ describe("Label", () => {
     });
 
     it("* 표시에 text-danger 클래스를 적용한다", () => {
-      const { container } = render(<Label required={true}>라벨</Label>);
+      render(<Label required={true}>라벨</Label>);
       const asterisk = screen.getByText("*");
       expect(asterisk).toHaveClass("text-danger");
     });
