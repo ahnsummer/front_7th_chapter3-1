@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Alert, Table, Modal } from "../components/organisms";
+import { Table, Modal } from "../components/organisms";
+import { Alert } from "@/components/ui/alert";
 import { Input } from "../components/ui/input";
 import { userService } from "../services/userService";
 import { postService } from "../services/postService";
@@ -345,7 +346,7 @@ export const ManagementPage: React.FC = () => {
             {showErrorAlert && (
               <div style={{ marginBottom: "10px" }}>
                 <Alert
-                  variant="error"
+                  variant="danger"
                   title="오류"
                   onClose={() => setShowErrorAlert(false)}>
                   {errorMessage}
