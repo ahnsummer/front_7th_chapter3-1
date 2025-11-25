@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Alert, Table, Modal } from "../components/organisms";
-import { FormSelect, FormTextarea } from "../components/molecules";
+import { FormSelect } from "../components/molecules";
 import { Input } from "../components/ui/input";
 import { userService } from "../services/userService";
 import { postService } from "../services/postService";
 import type { User } from "../services/userService";
 import type { Post } from "../services/postService";
 import "../styles/components.css";
+import { Textarea } from "@/components/ui/textarea";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
@@ -640,7 +641,7 @@ export const ManagementPage: React.FC = () => {
                   size="md"
                 />
               </div>
-              <FormTextarea
+              <Textarea
                 name="content"
                 value={formData.content || ""}
                 onChange={(value) =>
@@ -797,7 +798,7 @@ export const ManagementPage: React.FC = () => {
                   size="md"
                 />
               </div>
-              <FormTextarea
+              <Textarea
                 name="content"
                 value={formData.content || ""}
                 onChange={(value) =>
