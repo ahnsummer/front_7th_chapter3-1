@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Alert, Table, Modal } from "../components/organisms";
-import { FormSelect } from "../components/molecules";
 import { Input } from "../components/ui/input";
 import { userService } from "../services/userService";
 import { postService } from "../services/postService";
@@ -9,6 +8,7 @@ import type { User } from "../services/userService";
 import type { Post } from "../services/postService";
 import "../styles/components.css";
 import { Textarea } from "@/components/ui/textarea";
+import { Select } from "@/components/ui/select";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
@@ -566,7 +566,7 @@ export const ManagementPage: React.FC = () => {
                   gridTemplateColumns: "1fr 1fr",
                   gap: "16px",
                 }}>
-                <FormSelect
+                <Select
                   name="role"
                   value={formData.role || "user"}
                   onChange={(value) =>
@@ -578,9 +578,9 @@ export const ManagementPage: React.FC = () => {
                     { value: "admin", label: "관리자" },
                   ]}
                   label="역할"
-                  size="md"
+                  size="full"
                 />
-                <FormSelect
+                <Select
                   name="status"
                   value={formData.status || "active"}
                   onChange={(value) =>
@@ -592,7 +592,7 @@ export const ManagementPage: React.FC = () => {
                     { value: "suspended", label: "정지" },
                   ]}
                   label="상태"
-                  size="md"
+                  size="full"
                 />
               </div>
             </>
@@ -625,7 +625,7 @@ export const ManagementPage: React.FC = () => {
                   required
                   width="full"
                 />
-                <FormSelect
+                <Select
                   name="category"
                   value={formData.category || ""}
                   onChange={(value) =>
@@ -638,7 +638,7 @@ export const ManagementPage: React.FC = () => {
                   ]}
                   label="카테고리"
                   placeholder="카테고리 선택"
-                  size="md"
+                  size="full"
                 />
               </div>
               <Textarea
@@ -723,7 +723,7 @@ export const ManagementPage: React.FC = () => {
                   gridTemplateColumns: "1fr 1fr",
                   gap: "16px",
                 }}>
-                <FormSelect
+                <Select
                   name="role"
                   value={formData.role || "user"}
                   onChange={(value) =>
@@ -735,9 +735,9 @@ export const ManagementPage: React.FC = () => {
                     { value: "admin", label: "관리자" },
                   ]}
                   label="역할"
-                  size="md"
+                  size="full"
                 />
-                <FormSelect
+                <Select
                   name="status"
                   value={formData.status || "active"}
                   onChange={(value) =>
@@ -749,7 +749,7 @@ export const ManagementPage: React.FC = () => {
                     { value: "suspended", label: "정지" },
                   ]}
                   label="상태"
-                  size="md"
+                  size="full"
                 />
               </div>
             </>
@@ -782,7 +782,7 @@ export const ManagementPage: React.FC = () => {
                   required
                   width="full"
                 />
-                <FormSelect
+                <Select
                   name="category"
                   value={formData.category || ""}
                   onChange={(value) =>
@@ -795,7 +795,7 @@ export const ManagementPage: React.FC = () => {
                   ]}
                   label="카테고리"
                   placeholder="카테고리 선택"
-                  size="md"
+                  size="full"
                 />
               </div>
               <Textarea
