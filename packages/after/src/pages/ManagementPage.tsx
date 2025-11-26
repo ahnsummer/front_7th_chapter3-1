@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Table, Modal } from "../components/organisms";
+import { Table } from "../components/organisms";
+// import { Table } from "@/components/ui/table";
 import { Alert } from "@/components/ui/alert";
 import { Input } from "../components/ui/input";
 import { userService } from "../services/userService";
@@ -501,6 +502,18 @@ export const ManagementPage: React.FC = () => {
                 background: "white",
                 overflow: "auto",
               }}>
+              {/* <Table
+                columns={renderTableColumns()}
+                data={data}
+                striped
+                hover
+                entityType={entityType}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onPublish={(id) => handleStatusAction(id, "publish")}
+                onArchive={(id) => handleStatusAction(id, "archive")}
+                onRestore={(id) => handleStatusAction(id, "restore")}
+              /> */}
               <Table
                 columns={renderTableColumns()}
                 data={data}
