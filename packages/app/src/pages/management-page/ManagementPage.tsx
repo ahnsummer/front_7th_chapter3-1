@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@repo/after";
-import { Table } from "../../organisms/Table";
+import { Button, Table } from "@repo/after";
 import { userService, type User } from "@/services/userService";
 import { postService, type Post } from "@/services/postService";
 import { PageHeader } from "@/pages/management-page/components/PageHeader";
