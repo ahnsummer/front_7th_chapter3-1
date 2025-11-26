@@ -1,24 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Table } from "../components/organisms";
-// import { Table } from "@/components/ui/table";
-import { Alert } from "@/components/ui/alert";
-import { Input } from "../components/ui/input";
-import { userService } from "../services/userService";
-import { postService } from "../services/postService";
-import type { User } from "../services/userService";
-import type { Post } from "../services/postService";
-import "../styles/components.css";
-import { Textarea } from "@/components/ui/textarea";
-import { Select } from "@/components/ui/select";
 import {
+  Button,
+  Alert,
+  Input,
+  Textarea,
+  Select,
   Dialog,
   DialogBody,
   DialogClose,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@repo/after";
+import { Table } from "../organisms/Table";
+import { userService, type User } from "@/services/userService";
+import { postService, type Post } from "@/services/postService";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;

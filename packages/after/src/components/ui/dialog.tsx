@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { cva } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { cn } from "@repo/utils";
 
 const dialogOverlayVariants = cva(
   "fixed top-0 left-0 right-0 bottom-0 bg-black/50 flex items-center justify-center z-[1000] p-4"

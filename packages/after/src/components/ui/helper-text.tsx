@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@repo/utils";
 import { cva } from "class-variance-authority";
 
 const helperTextVariants = cva("mt-1 text-gray-600 text-xs", {

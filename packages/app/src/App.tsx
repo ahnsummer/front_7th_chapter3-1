@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "./components/ui/header";
+import { Header } from "@repo/after";
 import { ManagementPage } from "./pages/ManagementPage";
 import "./index.css";
 import "./styles/components.css";

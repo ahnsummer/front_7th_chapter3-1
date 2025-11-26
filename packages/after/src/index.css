@@ -1,4 +1,8 @@
-@import "tailwindcss";
+@import "tailwindcss/theme.css";
+@import "tailwindcss/preflight.css";
+@import "tailwindcss/utilities.css";
+
+@source "./**/*.{js,jsx,ts,tsx}";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -132,16 +136,4 @@
   --color-gray-700: #e5e5e5;
   --color-gray-800: #f5f5f5;
   --color-gray-900: #fafafa;
-}
-
-@layer base {
-  * {
-    @apply m-0 p-0 box-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    line-height: var(--line-height-normal);
-  }
 }

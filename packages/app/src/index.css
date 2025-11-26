@@ -1,0 +1,18 @@
+@import "tailwindcss/theme.css";
+@import "tailwindcss/preflight.css";
+@import "tailwindcss/utilities.css";
+@import "@repo/after/index.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  * {
+    @apply m-0 p-0 box-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    line-height: var(--line-height-normal);
+  }
+}

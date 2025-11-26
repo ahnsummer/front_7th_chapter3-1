@@ -21,7 +21,7 @@ const avatarVariants = cva(
   "w-10 h-10 rounded-full bg-info-light flex items-center justify-center text-primary font-semibold text-base"
 );
 
-const Header = () => {
+export const Header = () => {
   return (
     <header className={headerVariants()}>
       <div className={headerContainerVariants()}>
@@ -38,5 +38,3 @@ const Header = () => {
     </header>
   );
 };
-
-export default Header;
