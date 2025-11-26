@@ -1,120 +1,362 @@
-import * as React from "react";
-
+import React, { useState, useEffect } from "react";
+import { cva } from "class-variance-authority";
 import { cn } from "@repo/utils";
+import { Button } from "./button";
+import { Badge } from "./badge";
 
-const Table = React.forwardRef<
-  HTMLTableElement,
-  React.HTMLAttributes<HTMLTableElement>
->(({ className, ...props }, ref) => (
-  <div className="relative w-full overflow-auto">
-    <table
-      ref={ref}
-      className={cn("w-full caption-bottom text-sm", className)}
-      {...props}
-    />
-  </div>
-));
-Table.displayName = "Table";
+const tableContainerVariants = cva("overflow-x-auto");
 
-const TableHeader = React.forwardRef<
-  HTMLTableSectionElement,
-  React.HTMLAttributes<HTMLTableSectionElement>
->(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn("[&_tr]:border-b", className)} {...props} />
-));
-TableHeader.displayName = "TableHeader";
+const tableVariants = cva("w-full border-collapse text-sm bg-white", {
+  variants: {
+    striped: {
+      true: "[&_tbody_tr:nth-child(even)]:bg-gray-50",
+      false: "",
+    },
+    bordered: {
+      true: "border border-black/12 [&_th]:border [&_th]:border-black/12 [&_td]:border [&_td]:border-black/12",
+      false: "",
+    },
+    hover: {
+      true: "[&_tbody_tr:hover]:bg-black/4",
+      false: "",
+    },
+  },
+  defaultVariants: {
+    striped: false,
+    bordered: false,
+    hover: false,
+  },
+});
 
-const TableBody = React.forwardRef<
-  HTMLTableSectionElement,
-  React.HTMLAttributes<HTMLTableSectionElement>
->(({ className, ...props }, ref) => (
-  <tbody
-    ref={ref}
-    className={cn("[&_tr:last-child]:border-0", className)}
-    {...props}
-  />
-));
-TableBody.displayName = "TableBody";
+const theadVariants = cva("bg-gray-50");
 
-const TableFooter = React.forwardRef<
-  HTMLTableSectionElement,
-  React.HTMLAttributes<HTMLTableSectionElement>
->(({ className, ...props }, ref) => (
-  <tfoot
-    ref={ref}
-    className={cn(
-      "border-t bg-muted/50 font-medium [&>tr]:last:border-b-0",
-      className
-    )}
-    {...props}
-  />
-));
-TableFooter.displayName = "TableFooter";
+const thVariants = cva(
+  "px-4 py-4 text-left font-medium text-xs text-black/60 uppercase tracking-wide border-b-2 border-black/12"
+);
 
-const TableRow = React.forwardRef<
-  HTMLTableRowElement,
-  React.HTMLAttributes<HTMLTableRowElement>
->(({ className, ...props }, ref) => (
-  <tr
-    ref={ref}
-    className={cn(
-      "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
-      className
-    )}
-    {...props}
-  />
-));
-TableRow.displayName = "TableRow";
+const tdVariants = cva("px-4 py-4 text-black/87 border-b border-black/8");
 
-const TableHead = React.forwardRef<
-  HTMLTableCellElement,
-  React.ThHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => (
-  <th
-    ref={ref}
-    className={cn(
-      "h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
-      className
-    )}
-    {...props}
-  />
-));
-TableHead.displayName = "TableHead";
+const tbodyLastRowVariants = cva("[&_tr:last-child_td]:border-b-0");
 
-const TableCell = React.forwardRef<
-  HTMLTableCellElement,
-  React.TdHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => (
-  <td
-    ref={ref}
-    className={cn(
-      "p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
-      className
-    )}
-    {...props}
-  />
-));
-TableCell.displayName = "TableCell";
+const searchInputVariants = cva(
+  "px-3 py-2 border border-gray-300 rounded w-[300px] mb-4"
+);
 
-const TableCaption = React.forwardRef<
-  HTMLTableCaptionElement,
-  React.HTMLAttributes<HTMLTableCaptionElement>
->(({ className, ...props }, ref) => (
-  <caption
-    ref={ref}
-    className={cn("mt-4 text-sm text-muted-foreground", className)}
-    {...props}
-  />
-));
-TableCaption.displayName = "TableCaption";
+const paginationContainerVariants = cva("mt-4 flex gap-2 justify-center");
 
-export {
-  Table,
-  TableHeader,
-  TableBody,
-  TableFooter,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableCaption,
+const paginationButtonVariants = cva(
+  "px-3 py-1.5 border border-gray-300 bg-white rounded transition-colors",
+  {
+    variants: {
+      disabled: {
+        true: "cursor-not-allowed opacity-50",
+        false: "cursor-pointer hover:bg-gray-50",
+      },
+    },
+    defaultVariants: {
+      disabled: false,
+    },
+  }
+);
+
+const sortHeaderVariants = cva("flex items-center gap-1", {
+  variants: {
+    sortable: {
+      true: "cursor-pointer",
+      false: "cursor-default",
+    },
+  },
+});
+
+interface Column {
+  key: string;
+  header: string;
+  width?: string;
+  sortable?: boolean;
+}
+
+// 🚨 Bad Practice: UI 컴포넌트가 도메인 타입을 알고 있음
+interface TableProps {
+  columns?: Column[];
+  data?: any[];
+  striped?: boolean;
+  bordered?: boolean;
+  hover?: boolean;
+  pageSize?: number;
+  searchable?: boolean;
+  sortable?: boolean;
+  onRowClick?: (row: any) => void;
+
+  // 🚨 도메인 관심사 추가
+  entityType?: "user" | "post";
+  onEdit?: (item: any) => void;
+  onDelete?: (id: number) => void;
+  onPublish?: (id: number) => void;
+  onArchive?: (id: number) => void;
+  onRestore?: (id: number) => void;
+}
+
+const Table: React.FC<TableProps> = ({
+  columns,
+  data = [],
+  striped = false,
+  bordered = false,
+  hover = false,
+  pageSize = 10,
+  searchable = false,
+  sortable = false,
+  onRowClick,
+  entityType,
+  onEdit,
+  onDelete,
+  onPublish,
+  onArchive,
+  onRestore,
+}) => {
+  const [tableData, setTableData] = useState<any[]>(data);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortColumn, setSortColumn] = useState("");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
+  useEffect(() => {
+    setTableData(data);
+  }, [data]);
+
+  const handleSort = (columnKey: string) => {
+    if (!sortable) return;
+
+    const newDirection =
+      sortColumn === columnKey && sortDirection === "asc" ? "desc" : "asc";
+    setSortColumn(columnKey);
+    setSortDirection(newDirection);
+
+    const sorted = [...tableData].sort((a, b) => {
+      const aVal = a[columnKey];
+      const bVal = b[columnKey];
+
+      if (typeof aVal === "number" && typeof bVal === "number") {
+        return newDirection === "asc" ? aVal - bVal : bVal - aVal;
+      }
+
+      return newDirection === "asc"
+        ? String(aVal).localeCompare(String(bVal))
+        : String(bVal).localeCompare(String(aVal));
+    });
+
+    setTableData(sorted);
+  };
+
+  const filteredData =
+    searchable && searchTerm
+      ? tableData.filter((row) =>
+          Object.values(row).some((val) =>
+            String(val).toLowerCase().includes(searchTerm.toLowerCase())
+          )
+        )
+      : tableData;
+
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
+  const totalPages = Math.ceil(filteredData.length / pageSize);
+
+  const actualColumns =
+    columns ||
+    (tableData[0]
+      ? Object.keys(tableData[0]).map((key) => ({
+          key,
+          header: key,
+          width: undefined,
+        }))
+      : []);
+
+  // 🚨 Bad Practice: Table 컴포넌트가 도메인별 렌더링 로직을 알고 있음
+  const renderCell = (row: any, columnKey: string) => {
+    const value = row[columnKey];
+
+    // 도메인별 특수 렌더링
+    if (entityType === "user") {
+      if (columnKey === "role") {
+        return <Badge userRole={value} showIcon />;
+      }
+      if (columnKey === "status") {
+        const badgeStatus =
+          value === "active"
+            ? "published"
+            : value === "inactive"
+            ? "draft"
+            : "rejected";
+        return <Badge status={badgeStatus} showIcon />;
+      }
+      if (columnKey === "lastLogin") {
+        return value || "-";
+      }
+      if (columnKey === "actions") {
+        return (
+          <div className="flex gap-2">
+            <Button size="sm" variant="primary" onClick={() => onEdit?.(row)}>
+              수정
+            </Button>
+            <Button
+              size="sm"
+              variant="danger"
+              onClick={() => onDelete?.(row.id)}>
+              삭제
+            </Button>
+          </div>
+        );
+      }
+    }
+
+    if (entityType === "post") {
+      if (columnKey === "category") {
+        const type =
+          value === "development"
+            ? "primary"
+            : value === "design"
+            ? "info"
+            : value === "accessibility"
+            ? "danger"
+            : "secondary";
+        return (
+          <Badge variant={type} pill>
+            {value}
+          </Badge>
+        );
+      }
+      if (columnKey === "status") {
+        return <Badge status={value} showIcon />;
+      }
+      if (columnKey === "views") {
+        return value?.toLocaleString() || "0";
+      }
+      if (columnKey === "actions") {
+        return (
+          <div className="flex gap-2 flex-wrap">
+            <Button size="sm" variant="primary" onClick={() => onEdit?.(row)}>
+              수정
+            </Button>
+            {row.status === "draft" && (
+              <Button
+                size="sm"
+                variant="success"
+                onClick={() => onPublish?.(row.id)}>
+                게시
+              </Button>
+            )}
+            {row.status === "published" && (
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => onArchive?.(row.id)}>
+                보관
+              </Button>
+            )}
+            {row.status === "archived" && (
+              <Button
+                size="sm"
+                variant="primary"
+                onClick={() => onRestore?.(row.id)}>
+                복원
+              </Button>
+            )}
+            <Button
+              size="sm"
+              variant="danger"
+              onClick={() => onDelete?.(row.id)}>
+              삭제
+            </Button>
+          </div>
+        );
+      }
+    }
+
+    // React Element면 그대로 렌더링
+    if (React.isValidElement(value)) {
+      return value;
+    }
+
+    return value;
+  };
+
+  return (
+    <div className={tableContainerVariants()}>
+      {searchable && (
+        <div>
+          <input
+            type="text"
+            placeholder="검색..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={searchInputVariants()}
+          />
+        </div>
+      )}
+
+      <table className={cn(tableVariants({ striped, bordered, hover }))}>
+        <thead className={theadVariants()}>
+          <tr>
+            {actualColumns.map((column) => (
+              <th
+                key={column.key}
+                style={column.width ? { width: column.width } : undefined}
+                onClick={() => sortable && handleSort(column.key)}
+                className={thVariants()}>
+                <div className={cn(sortHeaderVariants({ sortable }))}>
+                  {column.header}
+                  {sortable && sortColumn === column.key && (
+                    <span>{sortDirection === "asc" ? "↑" : "↓"}</span>
+                  )}
+                </div>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className={tbodyLastRowVariants()}>
+          {paginatedData.map((row, rowIndex) => (
+            <tr
+              key={rowIndex}
+              onClick={() => onRowClick?.(row)}
+              className={cn(onRowClick ? "cursor-pointer" : "cursor-default")}>
+              {actualColumns.map((column) => (
+                <td key={column.key} className={tdVariants()}>
+                  {entityType ? renderCell(row, column.key) : row[column.key]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {totalPages > 1 && (
+        <div className={paginationContainerVariants()}>
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className={cn(
+              paginationButtonVariants({ disabled: currentPage === 1 })
+            )}>
+            이전
+          </button>
+          <span className="px-3 py-1.5">
+            {currentPage} / {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className={cn(
+              paginationButtonVariants({ disabled: currentPage === totalPages })
+            )}>
+            다음
+          </button>
+        </div>
+      )}
+    </div>
+  );
 };
+
+export { Table, tableVariants };
+export type { TableProps, Column };

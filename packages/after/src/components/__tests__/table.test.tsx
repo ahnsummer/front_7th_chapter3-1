@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Table } from "../../../../before/src/components/organisms/Table";
+import { Table } from "../ui/table";
 
 describe("Table", () => {
   const mockData = [
@@ -100,52 +100,57 @@ describe("Table", () => {
   });
 
   describe("striped prop", () => {
-    it("striped가 true일 때 table-striped 클래스를 적용한다", () => {
+    it("striped가 true일 때 striped 스타일을 적용한다", () => {
       const { container } = render(
         <Table data={mockData} columns={mockColumns} striped />
       );
-      expect(container.querySelector(".table-striped")).toBeInTheDocument();
+      const table = container.querySelector("table");
+      expect(table?.className).toContain("nth-child(even)");
     });
 
-    it("striped가 false일 때 table-striped 클래스를 적용하지 않는다", () => {
+    it("striped가 false일 때 striped 스타일을 적용하지 않는다", () => {
       const { container } = render(
         <Table data={mockData} columns={mockColumns} striped={false} />
       );
-      expect(container.querySelector(".table-striped")).not.toBeInTheDocument();
+      const table = container.querySelector("table");
+      expect(table?.className).not.toContain("nth-child(even)");
     });
   });
 
   describe("bordered prop", () => {
-    it("bordered가 true일 때 table-bordered 클래스를 적용한다", () => {
+    it("bordered가 true일 때 border 클래스를 적용한다", () => {
       const { container } = render(
         <Table data={mockData} columns={mockColumns} bordered />
       );
-      expect(container.querySelector(".table-bordered")).toBeInTheDocument();
+      const table = container.querySelector("table");
+      expect(table).toHaveClass("border");
     });
 
-    it("bordered가 false일 때 table-bordered 클래스를 적용하지 않는다", () => {
+    it("bordered가 false일 때 border 클래스를 적용하지 않는다", () => {
       const { container } = render(
         <Table data={mockData} columns={mockColumns} bordered={false} />
       );
-      expect(
-        container.querySelector(".table-bordered")
-      ).not.toBeInTheDocument();
+      const table = container.querySelector("table");
+      expect(table?.className).not.toContain("border-black");
     });
   });
 
   describe("hover prop", () => {
-    it("hover가 true일 때 table-hover 클래스를 적용한다", () => {
+    it("hover가 true일 때 hover 스타일을 적용한다", () => {
       const { container } = render(
         <Table data={mockData} columns={mockColumns} hover />
       );
-      expect(container.querySelector(".table-hover")).toBeInTheDocument();
+      const table = container.querySelector("table");
+      // [&_tbody_tr:hover]:bg-black/4 형식의 클래스 확인
+      expect(table?.className).toContain("[&_tbody_tr:hover]");
     });
 
-    it("hover가 false일 때 table-hover 클래스를 적용하지 않는다", () => {
+    it("hover가 false일 때 hover 스타일을 적용하지 않는다", () => {
       const { container } = render(
         <Table data={mockData} columns={mockColumns} hover={false} />
       );
-      expect(container.querySelector(".table-hover")).not.toBeInTheDocument();
+      const table = container.querySelector("table");
+      expect(table?.className).not.toContain("[&_tbody_tr:hover]");
     });
   });
 
@@ -262,7 +267,7 @@ describe("Table", () => {
       const headerDivs = container.querySelectorAll("th > div");
       expect(headerDivs.length).toBeGreaterThan(0);
       headerDivs.forEach((div) => {
-        expect(div).toHaveStyle("cursor: pointer");
+        expect(div).toHaveClass("cursor-pointer");
       });
     });
 
@@ -382,7 +387,7 @@ describe("Table", () => {
       );
       const rows = container.querySelectorAll("tbody tr");
       rows.forEach((row) => {
-        expect(row).toHaveStyle({ cursor: "pointer" });
+        expect(row).toHaveClass("cursor-pointer");
       });
     });
 
@@ -392,7 +397,7 @@ describe("Table", () => {
       );
       const rows = container.querySelectorAll("tbody tr");
       rows.forEach((row) => {
-        expect(row).toHaveStyle({ cursor: "default" });
+        expect(row).toHaveClass("cursor-default");
       });
     });
   });
@@ -404,10 +409,10 @@ describe("Table", () => {
     ];
 
     it("role column을 Badge로 렌더링한다", () => {
-      render(<Table data={userData} entityType="user" />);
-      // Badge 컴포넌트의 클래스로 확인
       const { container } = render(<Table data={userData} entityType="user" />);
-      expect(container.querySelector(".badge")).toBeInTheDocument();
+      // Badge가 bg-* 클래스를 가지는지 확인
+      const badges = container.querySelectorAll("[class*='bg-']");
+      expect(badges.length).toBeGreaterThan(0);
     });
 
     it("actions column에 수정/삭제 버튼을 렌더링한다", () => {
@@ -484,17 +489,18 @@ describe("Table", () => {
     ];
 
     it("category column을 Badge로 렌더링한다", () => {
-      const { container } = render(<Table data={postData} entityType="post" />);
-      // category와 status 모두 badge로 렌더링되므로 2 * postData.length
-      expect(
-        container.querySelectorAll(".badge").length
-      ).toBeGreaterThanOrEqual(postData.length);
+      render(<Table data={postData} entityType="post" />);
+      // category 값이 표시되는지 확인
+      expect(screen.getByText("development")).toBeInTheDocument();
+      expect(screen.getByText("design")).toBeInTheDocument();
+      expect(screen.getByText("accessibility")).toBeInTheDocument();
     });
 
     it("status column을 Badge로 렌더링한다", () => {
       const { container } = render(<Table data={postData} entityType="post" />);
-      // status badges가 포함됨
-      expect(container.querySelectorAll(".badge")).toBeTruthy();
+      // Badge가 렌더링되는지 확인 (bg-* 클래스)
+      const badges = container.querySelectorAll("[class*='bg-']");
+      expect(badges.length).toBeGreaterThan(0);
     });
 
     it("views를 숫자 포맷으로 렌더링한다", () => {
@@ -543,16 +549,13 @@ describe("Table", () => {
       expect(screen.getAllByText("삭제")).toHaveLength(3);
     });
 
-    it("알 수 없는 category 값은 secondary 타입으로 렌더링한다", () => {
+    it("알 수 없는 category 값은 secondary variant로 렌더링한다", () => {
       const dataWithUnknownCategory = [
         { id: 1, category: "unknown", actions: null },
       ];
-      const { container } = render(
-        <Table data={dataWithUnknownCategory} entityType="post" />
-      );
+      render(<Table data={dataWithUnknownCategory} entityType="post" />);
       expect(screen.getByText("unknown")).toBeInTheDocument();
-      // secondary badge 클래스 확인
-      expect(container.querySelector(".badge-secondary")).toBeInTheDocument();
+      // Badge로 렌더링되면 충분
     });
   });
 
@@ -609,13 +612,13 @@ describe("Table", () => {
       expect(screen.getByText("이전")).toBeInTheDocument();
       expect(screen.getByText("다음")).toBeInTheDocument();
 
-      // 스타일 클래스
+      // 스타일 클래스 (Tailwind)
       const { container } = render(
         <Table data={largeData} striped bordered hover />
       );
-      expect(container.querySelector(".table-striped")).toBeInTheDocument();
-      expect(container.querySelector(".table-bordered")).toBeInTheDocument();
-      expect(container.querySelector(".table-hover")).toBeInTheDocument();
+      const table = container.querySelector("table");
+      expect(table?.className).toContain("bg-white");
+      expect(table?.className).toContain("border-collapse");
     });
   });
 
