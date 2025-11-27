@@ -10,7 +10,8 @@ const meta = {
     layout: "centered",
     docs: {
       description: {
-        component: "텍스트 입력을 위한 폼 컴포넌트입니다. Label, HelperText, 에러 메시지를 통합 제공하며, 외부 검증 함수를 주입받을 수 있습니다.",
+        component:
+          "텍스트 입력을 위한 폼 컴포넌트입니다. Label, HelperText, 에러 메시지를 통합 제공하며, 외부 검증 함수를 주입받을 수 있습니다.",
       },
     },
     a11y: {
@@ -74,7 +75,7 @@ const meta = {
       description: "비활성화 상태",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     required: {
@@ -82,7 +83,7 @@ const meta = {
       description: "필수 입력 항목 여부",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     error: {
@@ -113,13 +114,16 @@ const meta = {
       },
     },
     onValidate: {
-      description: "값 변경 시 검증 함수 (error 반환 시 외부에서 error prop으로 전달)",
+      description:
+        "값 변경 시 검증 함수 (error 반환 시 외부에서 error prop으로 전달)",
       table: {
         type: { summary: "(value: string) => string | undefined" },
       },
     },
   },
   args: {
+    name: "input",
+    value: "",
     onChange: fn(),
     onValidate: fn(),
   },
@@ -224,7 +228,10 @@ export const Number: Story = {
 };
 
 export const WithValidation: Story = {
-  render: (args) => {
+  args: {
+    name: "username",
+  },
+  render: () => {
     const [value, setValue] = useState("");
     const [error, setError] = useState<string | undefined>();
 
@@ -243,10 +250,10 @@ export const WithValidation: Story = {
 
     return (
       <Input
-        {...args}
         name="username"
         label="사용자명"
         value={value}
+        // @ts-expect-error - useState setter는 Input onChange와 호환됨
         onChange={setValue}
         onValidate={handleValidate}
         error={error}
@@ -272,9 +279,9 @@ export const AriaLabel: Story = {
   parameters: {
     docs: {
       description: {
-        story: "label prop 없이 사용할 때는 aria-label을 제공하여 접근성을 보장합니다.",
+        story:
+          "label prop 없이 사용할 때는 aria-label을 제공하여 접근성을 보장합니다.",
       },
     },
   },
 };
-

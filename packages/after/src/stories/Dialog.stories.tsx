@@ -1,7 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
 import { useState } from "react";
-import { Dialog, DialogHeader, DialogTitle, DialogClose, DialogBody, DialogFooter } from "../components/ui/dialog";
+import {
+  Dialog,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+  DialogBody,
+  DialogFooter,
+} from "../components/ui/dialog";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 
@@ -12,7 +19,8 @@ const meta = {
     layout: "centered",
     docs: {
       description: {
-        component: "모달 다이얼로그 컴포넌트입니다. 단순 사용과 조립형 사용 두 가지 방식을 지원하며, 배경 클릭으로 닫기, 스크롤 방지 등의 기능을 제공합니다.",
+        component:
+          "모달 다이얼로그 컴포넌트입니다. 단순 사용과 조립형 사용 두 가지 방식을 지원하며, 배경 클릭으로 닫기, 스크롤 방지 등의 기능을 제공합니다.",
       },
     },
     a11y: {
@@ -78,7 +86,7 @@ const meta = {
       description: "푸터 표시 여부",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     footer: {
@@ -89,7 +97,9 @@ const meta = {
     },
   },
   args: {
+    isOpen: true,
     onClose: fn(),
+    children: "다이얼로그 내용",
   },
 } satisfies Meta<typeof Dialog>;
 
@@ -104,8 +114,12 @@ export const Simple: Story = {
     showFooter: true,
     footerContent: (
       <>
-        <Button variant="secondary" size="md">취소</Button>
-        <Button variant="primary" size="md">확인</Button>
+        <Button variant="secondary" size="md">
+          취소
+        </Button>
+        <Button variant="primary" size="md">
+          확인
+        </Button>
       </>
     ),
   },
@@ -118,15 +132,30 @@ export const WithForm: Story = {
     size: "md",
     children: (
       <div className="space-y-4">
-        <Input name="username" label="사용자명" placeholder="사용자명 입력" onChange={() => {}} />
-        <Input name="email" label="이메일" type="email" placeholder="이메일 입력" onChange={() => {}} />
+        <Input
+          name="username"
+          label="사용자명"
+          placeholder="사용자명 입력"
+          onChange={() => {}}
+        />
+        <Input
+          name="email"
+          label="이메일"
+          type="email"
+          placeholder="이메일 입력"
+          onChange={() => {}}
+        />
       </div>
     ),
     showFooter: true,
     footerContent: (
       <>
-        <Button variant="secondary" size="md">취소</Button>
-        <Button variant="primary" size="md">등록</Button>
+        <Button variant="secondary" size="md">
+          취소
+        </Button>
+        <Button variant="primary" size="md">
+          등록
+        </Button>
       </>
     ),
   },
@@ -170,9 +199,13 @@ export const CustomHeader: Story = {
 };
 
 export const ComposableDialog: Story = {
+  args: {
+    isOpen: true,
+    children: "조립형 다이얼로그",
+  },
   render: () => {
     const [isOpen, setIsOpen] = useState(true);
-    
+
     return (
       <>
         <Button onClick={() => setIsOpen(true)}>다이얼로그 열기</Button>
@@ -186,10 +219,16 @@ export const ComposableDialog: Story = {
             <p>조합하여 사용할 수 있습니다.</p>
           </DialogBody>
           <DialogFooter>
-            <Button variant="secondary" size="md" onClick={() => setIsOpen(false)}>
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={() => setIsOpen(false)}>
               취소
             </Button>
-            <Button variant="primary" size="md" onClick={() => setIsOpen(false)}>
+            <Button
+              variant="primary"
+              size="md"
+              onClick={() => setIsOpen(false)}>
               확인
             </Button>
           </DialogFooter>
@@ -200,7 +239,8 @@ export const ComposableDialog: Story = {
   parameters: {
     docs: {
       description: {
-        story: "DialogHeader, DialogTitle, DialogBody, DialogFooter를 조립하여 더 세밀한 제어가 가능합니다.",
+        story:
+          "DialogHeader, DialogTitle, DialogBody, DialogFooter를 조립하여 더 세밀한 제어가 가능합니다.",
       },
     },
   },
@@ -214,7 +254,10 @@ export const LongContent: Story = {
     children: (
       <div className="space-y-4">
         {Array.from({ length: 20 }, (_, i) => (
-          <p key={i}>이것은 {i + 1}번째 문단입니다. 긴 콘텐츠가 스크롤 가능한지 확인합니다.</p>
+          <p key={i}>
+            이것은 {i + 1}번째 문단입니다. 긴 콘텐츠가 스크롤 가능한지
+            확인합니다.
+          </p>
         ))}
       </div>
     ),
@@ -222,4 +265,3 @@ export const LongContent: Story = {
     footerContent: <Button variant="primary">확인</Button>,
   },
 };
-

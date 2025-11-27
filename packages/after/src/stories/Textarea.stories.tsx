@@ -9,7 +9,8 @@ const meta = {
     layout: "centered",
     docs: {
       description: {
-        component: "여러 줄의 텍스트 입력을 위한 컴포넌트입니다. Label, HelperText, 에러 메시지를 통합 제공합니다.",
+        component:
+          "여러 줄의 텍스트 입력을 위한 컴포넌트입니다. Label, HelperText, 에러 메시지를 통합 제공합니다.",
       },
     },
     a11y: {
@@ -51,7 +52,7 @@ const meta = {
       description: "textarea 높이 (행 수)",
       table: {
         type: { summary: "number" },
-        defaultValue: { summary: 4 },
+        defaultValue: { summary: "4" },
       },
     },
     disabled: {
@@ -59,7 +60,7 @@ const meta = {
       description: "비활성화 상태",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     required: {
@@ -67,7 +68,7 @@ const meta = {
       description: "필수 입력 항목 여부",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     error: {
@@ -99,6 +100,8 @@ const meta = {
     },
   },
   args: {
+    name: "textarea",
+    value: "",
     onChange: fn(),
   },
 } satisfies Meta<typeof Textarea>;
@@ -174,9 +177,14 @@ export const CustomRows: Story = {
 export const LongContent: Story = {
   args: {
     name: "content",
-    value: Array.from({ length: 10 }, (_, i) => `Line ${i + 1}: Lorem ipsum dolor sit amet, consectetur adipiscing elit.`).join("\n"),
+    value: Array.from(
+      { length: 10 },
+      (_, i) =>
+        `Line ${
+          i + 1
+        }: Lorem ipsum dolor sit amet, consectetur adipiscing elit.`
+    ).join("\n"),
     label: "긴 내용",
     rows: 6,
   },
 };
-

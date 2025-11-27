@@ -9,7 +9,8 @@ const meta = {
     layout: "centered",
     docs: {
       description: {
-        component: "체크박스 컴포넌트입니다. Radix UI를 기반으로 하며, Label과 함께 사용하여 접근성을 보장합니다.",
+        component:
+          "체크박스 컴포넌트입니다. Radix UI를 기반으로 하며, Label과 함께 사용하여 접근성을 보장합니다.",
       },
     },
     a11y: {
@@ -41,7 +42,7 @@ const meta = {
       description: "비활성화 상태",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     id: {
@@ -57,6 +58,9 @@ const meta = {
         type: { summary: "(checked: boolean) => void" },
       },
     },
+  },
+  args: {
+    id: "checkbox",
   },
 } satisfies Meta<typeof Checkbox>;
 
@@ -92,34 +96,45 @@ export const DisabledChecked: Story = {
 };
 
 export const WithLabel: Story = {
+  args: {},
   render: () => (
     <div className="flex items-center space-x-2">
       <Checkbox id="terms" />
-      <Label htmlFor="terms">이용약관에 동의합니다</Label>
+      <Label htmlFor="terms" required={true}>
+        이용약관에 동의합니다
+      </Label>
     </div>
   ),
 };
 
 export const MultipleCheckboxes: Story = {
+  args: {},
   render: () => (
     <div className="space-y-4">
       <div className="flex items-center space-x-2">
         <Checkbox id="option1" />
-        <Label htmlFor="option1">옵션 1</Label>
+        <Label htmlFor="option1" required={false}>
+          옵션 1
+        </Label>
       </div>
       <div className="flex items-center space-x-2">
         <Checkbox id="option2" defaultChecked />
-        <Label htmlFor="option2">옵션 2 (선택됨)</Label>
+        <Label htmlFor="option2" required={false}>
+          옵션 2 (선택됨)
+        </Label>
       </div>
       <div className="flex items-center space-x-2">
         <Checkbox id="option3" disabled />
-        <Label htmlFor="option3">옵션 3 (비활성)</Label>
+        <Label htmlFor="option3" required={false}>
+          옵션 3 (비활성)
+        </Label>
       </div>
       <div className="flex items-center space-x-2">
         <Checkbox id="option4" disabled defaultChecked />
-        <Label htmlFor="option4">옵션 4 (비활성, 선택됨)</Label>
+        <Label htmlFor="option4" required={false}>
+          옵션 4 (비활성, 선택됨)
+        </Label>
       </div>
     </div>
   ),
 };
-

@@ -8,7 +8,8 @@ const meta = {
     layout: "centered",
     docs: {
       description: {
-        component: "폼 필드 아래 표시되는 도움말 또는 에러 메시지 컴포넌트입니다.",
+        component:
+          "폼 필드 아래 표시되는 도움말 또는 에러 메시지 컴포넌트입니다.",
       },
     },
   },
@@ -26,9 +27,13 @@ const meta = {
       description: "에러 상태 (빨간색으로 표시)",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
+  },
+  args: {
+    text: "도움말 텍스트",
+    hasError: false,
   },
 } satisfies Meta<typeof HelperText>;
 
@@ -49,6 +54,9 @@ export const Error: Story = {
 };
 
 export const WithInput: Story = {
+  args: {
+    text: "3자 이상 입력하세요",
+  },
   render: () => (
     <div className="space-y-4 w-[300px]">
       <div className="space-y-2">
@@ -70,4 +78,3 @@ export const WithInput: Story = {
     </div>
   ),
 };
-

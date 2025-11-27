@@ -9,7 +9,8 @@ const meta = {
     layout: "padded",
     docs: {
       description: {
-        component: "사용자에게 중요한 정보를 전달하는 Alert 컴포넌트입니다. 다양한 variant와 닫기 기능을 제공합니다.",
+        component:
+          "사용자에게 중요한 정보를 전달하는 Alert 컴포넌트입니다. 다양한 variant와 닫기 기능을 제공합니다.",
       },
     },
     a11y: {
@@ -57,7 +58,7 @@ const meta = {
       description: "variant에 따른 아이콘 표시 여부",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: true },
+        defaultValue: { summary: "true" },
       },
     },
     onClose: {
@@ -68,6 +69,7 @@ const meta = {
     },
   },
   args: {
+    children: "Alert 메시지",
     onClose: fn(),
   },
 } satisfies Meta<typeof Alert>;
@@ -146,6 +148,9 @@ export const LongMessage: Story = {
 };
 
 export const AllVariants: Story = {
+  args: {
+    children: "",
+  },
   render: () => (
     <div className="space-y-4 w-[600px]">
       <Alert variant="primary">Primary alert message</Alert>
@@ -156,4 +161,3 @@ export const AllVariants: Story = {
     </div>
   ),
 };
-

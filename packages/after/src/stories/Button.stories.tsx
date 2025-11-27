@@ -9,7 +9,8 @@ const meta = {
     layout: "centered",
     docs: {
       description: {
-        component: "사용자 인터랙션을 위한 버튼 컴포넌트입니다. 다양한 variant, size를 지원하며 접근성을 고려하여 설계되었습니다.",
+        component:
+          "사용자 인터랙션을 위한 버튼 컴포넌트입니다. 다양한 variant, size를 지원하며 접근성을 고려하여 설계되었습니다.",
       },
     },
     a11y: {
@@ -52,7 +53,7 @@ const meta = {
       description: "너비를 100%로 설정",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     disabled: {
@@ -60,7 +61,7 @@ const meta = {
       description: "버튼 비활성화 상태",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     type: {
@@ -77,7 +78,7 @@ const meta = {
       description: "자식 컴포넌트를 버튼으로 렌더링 (Radix Slot 사용)",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     children: {
@@ -95,6 +96,7 @@ const meta = {
     },
   },
   args: {
+    children: "Button",
     onClick: fn(),
   },
 } satisfies Meta<typeof Button>;
@@ -176,6 +178,7 @@ export const FullWidth: Story = {
 };
 
 export const AllVariants: Story = {
+  args: {},
   render: () => (
     <div className="flex gap-2 flex-wrap">
       <Button variant="primary">Primary</Button>
@@ -188,6 +191,7 @@ export const AllVariants: Story = {
 };
 
 export const AllSizes: Story = {
+  args: {},
   render: () => (
     <div className="flex gap-2 items-center">
       <Button size="sm">Small</Button>
@@ -196,4 +200,3 @@ export const AllSizes: Story = {
     </div>
   ),
 };
-

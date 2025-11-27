@@ -8,7 +8,8 @@ const meta = {
     layout: "centered",
     docs: {
       description: {
-        component: "상태, 카테고리, 역할 등을 표시하는 뱃지 컴포넌트입니다. 다양한 색상과 크기를 지원합니다.",
+        component:
+          "상태, 카테고리, 역할 등을 표시하는 뱃지 컴포넌트입니다. 다양한 색상과 크기를 지원합니다.",
       },
     },
     a11y: {
@@ -47,7 +48,7 @@ const meta = {
       description: "완전히 둥근 모양 (rounded-full) 적용 여부",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     showIcon: {
@@ -55,7 +56,7 @@ const meta = {
       description: "아이콘 표시 여부 (미구현)",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     children: {
@@ -72,6 +73,9 @@ const meta = {
         type: { summary: "string" },
       },
     },
+  },
+  args: {
+    children: "Badge",
   },
 } satisfies Meta<typeof Badge>;
 
@@ -143,14 +147,27 @@ export const Pill: Story = {
 };
 
 export const AllVariantsPill: Story = {
+  args: {},
   render: () => (
     <div className="flex gap-2 flex-wrap">
-      <Badge variant="primary" pill>Primary</Badge>
-      <Badge variant="secondary" pill>Secondary</Badge>
-      <Badge variant="success" pill>Success</Badge>
-      <Badge variant="danger" pill>Danger</Badge>
-      <Badge variant="warning" pill>Warning</Badge>
-      <Badge variant="info" pill>Info</Badge>
+      <Badge variant="primary" pill>
+        Primary
+      </Badge>
+      <Badge variant="secondary" pill>
+        Secondary
+      </Badge>
+      <Badge variant="success" pill>
+        Success
+      </Badge>
+      <Badge variant="danger" pill>
+        Danger
+      </Badge>
+      <Badge variant="warning" pill>
+        Warning
+      </Badge>
+      <Badge variant="info" pill>
+        Info
+      </Badge>
     </div>
   ),
   parameters: {
@@ -163,6 +180,7 @@ export const AllVariantsPill: Story = {
 };
 
 export const AllSizes: Story = {
+  args: {},
   render: () => (
     <div className="flex gap-2 items-center">
       <Badge size="sm">Small</Badge>
@@ -171,4 +189,3 @@ export const AllSizes: Story = {
     </div>
   ),
 };
-

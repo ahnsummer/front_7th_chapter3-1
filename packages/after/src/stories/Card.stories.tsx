@@ -1,5 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "../components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "../components/ui/card";
 import { Button } from "../components/ui/button";
 
 const meta = {
@@ -9,7 +16,8 @@ const meta = {
     layout: "centered",
     docs: {
       description: {
-        component: "콘텐츠를 그룹화하는 카드 컴포넌트입니다. CardHeader, CardTitle, CardDescription, CardContent, CardFooter를 조합하여 사용합니다.",
+        component:
+          "콘텐츠를 그룹화하는 카드 컴포넌트입니다. CardHeader, CardTitle, CardDescription, CardContent, CardFooter를 조합하여 사용합니다.",
       },
     },
   },
@@ -29,12 +37,16 @@ const meta = {
       },
     },
   },
+  args: {
+    children: "Card 내용",
+  },
 } satisfies Meta<typeof Card>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Simple: Story = {
+  args: {},
   render: () => (
     <Card className="w-[400px]">
       <CardHeader>
@@ -49,6 +61,7 @@ export const Simple: Story = {
 };
 
 export const WithFooter: Story = {
+  args: {},
   render: () => (
     <Card className="w-[400px]">
       <CardHeader>
@@ -59,14 +72,19 @@ export const WithFooter: Story = {
         <p>이 작업은 되돌릴 수 없습니다.</p>
       </CardContent>
       <CardFooter>
-        <Button variant="secondary" size="sm">취소</Button>
-        <Button variant="primary" size="sm">확인</Button>
+        <Button variant="secondary" size="sm">
+          취소
+        </Button>
+        <Button variant="primary" size="sm">
+          확인
+        </Button>
       </CardFooter>
     </Card>
   ),
 };
 
 export const UserProfile: Story = {
+  args: {},
   render: () => (
     <Card className="w-[400px]">
       <CardHeader>
@@ -87,13 +105,16 @@ export const UserProfile: Story = {
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant="primary" size="sm" fullWidth>프로필 수정</Button>
+        <Button variant="primary" size="sm" fullWidth>
+          프로필 수정
+        </Button>
       </CardFooter>
     </Card>
   ),
 };
 
 export const ArticleCard: Story = {
+  args: {},
   render: () => (
     <Card className="w-[500px]">
       <CardHeader>
@@ -102,21 +123,24 @@ export const ArticleCard: Story = {
       </CardHeader>
       <CardContent>
         <p className="text-sm text-gray-600">
-          효과적인 리액트 컴포넌트를 설계하는 방법에 대해 알아봅니다. 
-          관심사의 분리, 재사용성, 테스트 가능성 등을 고려한 설계 원칙을 다룹니다.
+          효과적인 리액트 컴포넌트를 설계하는 방법에 대해 알아봅니다. 관심사의
+          분리, 재사용성, 테스트 가능성 등을 고려한 설계 원칙을 다룹니다.
         </p>
       </CardContent>
       <CardFooter className="justify-between">
         <div className="flex gap-2">
           <span className="text-sm text-gray-500">조회 1,234</span>
         </div>
-        <Button variant="primary" size="sm">자세히 보기</Button>
+        <Button variant="primary" size="sm">
+          자세히 보기
+        </Button>
       </CardFooter>
     </Card>
   ),
 };
 
 export const OnlyContent: Story = {
+  args: {},
   render: () => (
     <Card className="w-[400px]">
       <CardContent className="pt-6">
@@ -127,6 +151,7 @@ export const OnlyContent: Story = {
 };
 
 export const Multiple: Story = {
+  args: {},
   render: () => (
     <div className="flex gap-4">
       <Card className="w-[250px]">
@@ -156,4 +181,3 @@ export const Multiple: Story = {
     </div>
   ),
 };
-

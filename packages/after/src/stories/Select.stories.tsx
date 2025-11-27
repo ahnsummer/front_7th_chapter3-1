@@ -9,7 +9,8 @@ const meta = {
     layout: "centered",
     docs: {
       description: {
-        component: "드롭다운 선택 컴포넌트입니다. Label, HelperText, 에러 메시지를 통합 제공합니다.",
+        component:
+          "드롭다운 선택 컴포넌트입니다. Label, HelperText, 에러 메시지를 통합 제공합니다.",
       },
     },
     a11y: {
@@ -70,7 +71,7 @@ const meta = {
       description: "비활성화 상태",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     required: {
@@ -78,7 +79,7 @@ const meta = {
       description: "필수 선택 항목 여부",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     error: {
@@ -111,6 +112,12 @@ const meta = {
     },
   },
   args: {
+    name: "select",
+    value: "",
+    options: [
+      { value: "option1", label: "옵션 1" },
+      { value: "option2", label: "옵션 2" },
+    ],
     onChange: fn(),
   },
 } satisfies Meta<typeof Select>;
@@ -230,4 +237,3 @@ export const Large: Story = {
     size: "lg",
   },
 };
-

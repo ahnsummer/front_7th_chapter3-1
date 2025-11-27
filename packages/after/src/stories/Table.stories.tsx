@@ -12,7 +12,8 @@ const meta = {
     layout: "padded",
     docs: {
       description: {
-        component: "데이터를 테이블 형태로 표시하는 컴포넌트입니다. 검색, 정렬, 페이지네이션을 지원하며, column.render 함수를 통해 커스텀 셀 렌더링이 가능합니다.",
+        component:
+          "데이터를 테이블 형태로 표시하는 컴포넌트입니다. 검색, 정렬, 페이지네이션을 지원하며, column.render 함수를 통해 커스텀 셀 렌더링이 가능합니다.",
       },
     },
     a11y: {
@@ -49,7 +50,7 @@ const meta = {
       description: "짝수 행에 배경색 적용",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     bordered: {
@@ -57,7 +58,7 @@ const meta = {
       description: "테두리 표시",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     hover: {
@@ -65,7 +66,7 @@ const meta = {
       description: "행 hover 효과",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     searchable: {
@@ -73,7 +74,7 @@ const meta = {
       description: "검색 기능 활성화",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     sortable: {
@@ -81,7 +82,7 @@ const meta = {
       description: "정렬 기능 활성화",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     pageSize: {
@@ -89,7 +90,7 @@ const meta = {
       description: "페이지당 표시할 행 수",
       table: {
         type: { summary: "number" },
-        defaultValue: { summary: 10 },
+        defaultValue: { summary: "10" },
       },
     },
     onRowClick: {
@@ -241,6 +242,7 @@ const userStatusConfig = {
 };
 
 export const WithCustomRender: Story = {
+  args: {},
   render: () => {
     const userData: User[] = [
       {

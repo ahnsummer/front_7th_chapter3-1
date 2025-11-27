@@ -8,7 +8,8 @@ const meta = {
     layout: "centered",
     docs: {
       description: {
-        component: "폼 필드의 레이블 컴포넌트입니다. Radix UI Label을 기반으로 하며, required 표시를 지원합니다.",
+        component:
+          "폼 필드의 레이블 컴포넌트입니다. Radix UI Label을 기반으로 하며, required 표시를 지원합니다.",
       },
     },
     a11y: {
@@ -36,7 +37,7 @@ const meta = {
       description: "필수 항목 표시 (빨간색 * 추가)",
       table: {
         type: { summary: "boolean" },
-        defaultValue: { summary: false },
+        defaultValue: { summary: "false" },
       },
     },
     htmlFor: {
@@ -46,6 +47,10 @@ const meta = {
         type: { summary: "string" },
       },
     },
+  },
+  args: {
+    children: "Label",
+    required: false,
   },
 } satisfies Meta<typeof Label>;
 
@@ -66,6 +71,7 @@ export const Required: Story = {
 };
 
 export const WithInput: Story = {
+  args: {},
   render: () => (
     <div className="space-y-2">
       <Label htmlFor="username" required={true}>
@@ -80,4 +86,3 @@ export const WithInput: Story = {
     </div>
   ),
 };
-

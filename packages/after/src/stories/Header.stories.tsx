@@ -8,7 +8,8 @@ const meta = {
     layout: "fullscreen",
     docs: {
       description: {
-        component: "애플리케이션 상단 헤더 컴포넌트입니다. 로고와 사용자 정보를 표시하며, sticky 속성으로 스크롤 시 상단에 고정됩니다.",
+        component:
+          "애플리케이션 상단 헤더 컴포넌트입니다. 로고와 사용자 정보를 표시하며, sticky 속성으로 스크롤 시 상단에 고정됩니다.",
       },
     },
   },
@@ -18,9 +19,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {},
+};
 
 export const WithContent: Story = {
+  args: {},
   render: () => (
     <div>
       <Header />
@@ -29,7 +33,8 @@ export const WithContent: Story = {
         <p>Header는 sticky 속성으로 스크롤 시 상단에 고정됩니다.</p>
         {Array.from({ length: 20 }, (_, i) => (
           <p key={i} className="mb-2">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Line {i + 1}
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Line{" "}
+            {i + 1}
           </p>
         ))}
       </div>
@@ -43,4 +48,3 @@ export const WithContent: Story = {
     },
   },
 };
-
