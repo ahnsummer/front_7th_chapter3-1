@@ -19,11 +19,13 @@
     "test:run": "pnpm -r test:run",
     "test:run:before": "pnpm --filter @front_lite_chapter3-1/before test:run",
     "test:run:after": "pnpm --filter after test:run",
-    "gh-pages": "pnpm -F app... build && gh-pages -d ./packages/app/dist"
+    "gh-pages": "pnpm -F app... build && gh-pages -d ./packages/app/dist",
+    "chromatic": "npx chromatic --project-token=chpt_17c39da0bd6f0b8"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.14",
-    "typescript": "~5.9.3"
+    "typescript": "~5.9.3",
+    "gh-pages": "^6.3.0"
   },
   "engines": {
     "node": ">=18.0.0",

@@ -1,7 +1,13 @@
 import type { User } from "@/services/userService";
 import type { Post } from "@/services/postService";
 
-type BadgeVariant = "primary" | "secondary" | "success" | "danger" | "warning" | "info";
+type BadgeVariant =
+  | "primary"
+  | "secondary"
+  | "success"
+  | "danger"
+  | "warning"
+  | "info";
 
 export const USER_ROLE_CONFIG: Record<
   User["role"],
@@ -10,7 +16,6 @@ export const USER_ROLE_CONFIG: Record<
   admin: { variant: "danger", text: "관리자" },
   moderator: { variant: "warning", text: "운영자" },
   user: { variant: "primary", text: "사용자" },
-  guest: { variant: "secondary", text: "게스트" },
 };
 
 export const USER_STATUS_CONFIG: Record<
@@ -36,7 +41,4 @@ export const POST_STATUS_CONFIG: Record<
   published: { variant: "success", text: "게시됨" },
   draft: { variant: "warning", text: "임시저장" },
   archived: { variant: "secondary", text: "보관됨" },
-  pending: { variant: "info", text: "대기중" },
-  rejected: { variant: "danger", text: "거부됨" },
 };
-
