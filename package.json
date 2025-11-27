@@ -9,16 +9,17 @@
     "dev:app": "pnpm --filter app dev",
     "build": "pnpm -r build",
     "build:before": "pnpm --filter @front_lite_chapter3-1/before build",
-    "build:after": "pnpm --filter @front_lite_chapter3-1/after build",
-    "storybook": "pnpm --filter @front_lite_chapter3-1/after storybook",
-    "build-storybook": "pnpm --filter @front_lite_chapter3-1/after build-storybook",
+    "build:after": "pnpm --filter after build",
+    "storybook": "pnpm --filter after storybook",
+    "build-storybook": "pnpm --filter after build-storybook",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
     "test:before": "pnpm --filter @front_lite_chapter3-1/before test",
-    "test:after": "pnpm --filter @front_lite_chapter3-1/after test",
+    "test:after": "pnpm --filter after test",
     "test:run": "pnpm -r test:run",
     "test:run:before": "pnpm --filter @front_lite_chapter3-1/before test:run",
-    "test:run:after": "pnpm --filter @front_lite_chapter3-1/after test:run"
+    "test:run:after": "pnpm --filter after test:run",
+    "gh-pages": "pnpm -F app... build && gh-pages -d ./packages/app/dist"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.14",
