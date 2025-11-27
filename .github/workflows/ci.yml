@@ -29,5 +29,4 @@ jobs:
       - name: test basic
         run: |
           pnpm install
-          pnpm -r build
-          pnpm run test:run --no-cache
+          pnpm run test

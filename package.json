@@ -13,7 +13,7 @@
     "storybook": "pnpm --filter after storybook",
     "build-storybook": "pnpm --filter after build-storybook",
     "lint": "pnpm -r lint",
-    "test": "pnpm -r test",
+    "test": "pnpm -r build && pnpm -r test",
     "test:before": "pnpm --filter @front_lite_chapter3-1/before test",
     "test:after": "pnpm --filter after test",
     "test:run": "pnpm -r test:run",
