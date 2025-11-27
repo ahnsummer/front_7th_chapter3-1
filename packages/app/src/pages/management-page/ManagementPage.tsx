@@ -253,6 +253,7 @@ export const ManagementPage: React.FC = () => {
             user: { variant: "primary", text: "사용자" },
             guest: { variant: "secondary", text: "게스트" },
           };
+
           const config = roleConfig[user.role];
           return (
             <Badge variant={config.variant} showIcon>
@@ -274,6 +275,7 @@ export const ManagementPage: React.FC = () => {
             inactive: { variant: "warning", text: "비활성" },
             suspended: { variant: "danger", text: "정지" },
           };
+
           const config = statusConfig[user.status];
           return (
             <Badge variant={config.variant} showIcon>
@@ -446,7 +448,12 @@ export const ManagementPage: React.FC = () => {
         <div className="bg-white border border-gray-300 p-2.5">
           <EntityTabs
             entityType={entityType}
-            onEntityTypeChange={setEntityType}
+            onEntityTypeChange={(type) => {
+              setData([]);
+              queueMicrotask(() => {
+                setEntityType(type);
+              });
+            }}
           />
 
           <div>

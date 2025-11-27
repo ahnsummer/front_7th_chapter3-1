@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Dialog,
@@ -28,6 +28,15 @@ export const CreateModal: React.FC<CreateModalProps> = ({
   onClose,
   onCreate,
 }) => {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleValidate = (field: string, error: string | undefined) => {
+    setErrors((prev) => ({
+      ...prev,
+      [field]: error || "",
+    }));
+  };
+
   return (
     <Dialog size="lg" isOpen={isOpen} onClose={onClose}>
       <DialogHeader>
@@ -39,9 +48,19 @@ export const CreateModal: React.FC<CreateModalProps> = ({
       <DialogBody>
         <div className="flex flex-col gap-4">
           {entityType === "user" ? (
-            <UserFormFields formData={formData} onChange={onFormDataChange} />
+            <UserFormFields
+              formData={formData}
+              onChange={onFormDataChange}
+              errors={errors}
+              onValidate={handleValidate}
+            />
           ) : (
-            <PostFormFields formData={formData} onChange={onFormDataChange} />
+            <PostFormFields
+              formData={formData}
+              onChange={onFormDataChange}
+              errors={errors}
+              onValidate={handleValidate}
+            />
           )}
         </div>
       </DialogBody>
