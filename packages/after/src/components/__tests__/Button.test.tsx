@@ -36,6 +36,7 @@ describe("Button", () => {
       ["secondary", "bg-secondary"],
       ["danger", "bg-danger"],
       ["success", "bg-success"],
+      ["info", "bg-info"],
     ] as const)(
       "variant가 %s일 때 %s 클래스를 적용한다",
       (variant, className) => {
@@ -47,13 +48,19 @@ describe("Button", () => {
 
   describe("size prop", () => {
     it.each([
-      ["sm", "px-3 py-1.5 text-sm"],
-      ["md", "px-5 py-2.5 text-base"],
-      ["lg", "px-6 py-3 text-lg"],
-    ] as const)("size가 %s일 때 %s 클래스를 적용한다", (size, className) => {
-      render(<Button size={size}>버튼</Button>);
-      expect(screen.getByRole("button")).toHaveClass(className);
-    });
+      ["sm", "px-3", "py-1.5", "text-sm"],
+      ["md", "px-5", "py-2.5", "text-base"],
+      ["lg", "px-6", "py-3", "text-lg"],
+    ] as const)(
+      "size가 %s일 때 적절한 클래스를 적용한다",
+      (size, ...classNames) => {
+        render(<Button size={size}>버튼</Button>);
+        const button = screen.getByRole("button");
+        classNames.forEach((className) => {
+          expect(button).toHaveClass(className);
+        });
+      }
+    );
   });
 
   describe("disabled prop", () => {
@@ -69,14 +76,14 @@ describe("Button", () => {
   });
 
   describe("fullWidth prop", () => {
-    it("fullWidth가 true일 때 btn-fullwidth 클래스를 적용한다", () => {
+    it("fullWidth가 true일 때 w-full 클래스를 적용한다", () => {
       render(<Button fullWidth>버튼</Button>);
       expect(screen.getByRole("button")).toHaveClass("w-full");
     });
 
-    it("fullWidth가 false일 때 btn-fullwidth 클래스를 적용하지 않는다", () => {
+    it("fullWidth가 false일 때 w-full 클래스를 적용하지 않는다", () => {
       render(<Button fullWidth={false}>버튼</Button>);
-      expect(screen.getByRole("button")).not.toHaveClass("btn-fullwidth");
+      expect(screen.getByRole("button")).not.toHaveClass("w-full");
     });
   });
 
@@ -104,152 +111,8 @@ describe("Button", () => {
     });
   });
 
-  describe("entityType과 action prop (도메인 로직)", () => {
-    describe("user entity", () => {
-      it("admin 사용자에 대한 delete action은 버튼을 비활성화한다", () => {
-        const entity = { id: 1, role: "admin" };
-        render(
-          <Button entityType="user" action="delete" entity={entity}>
-            삭제
-          </Button>
-        );
-        expect(screen.getByRole("button")).toBeDisabled();
-      });
-
-      it("일반 사용자에 대한 delete action은 버튼을 활성화한다", () => {
-        const entity = { id: 1, role: "user" };
-        render(
-          <Button entityType="user" action="delete" entity={entity}>
-            삭제
-          </Button>
-        );
-        expect(screen.getByRole("button")).not.toBeDisabled();
-      });
-
-      it('user entity의 create action은 "새 사용자 만들기" 텍스트를 표시한다', () => {
-        const entity = { id: 1 };
-        render(<Button entityType="user" action="create" entity={entity} />);
-        expect(screen.getByText("새 사용자 만들기")).toBeInTheDocument();
-      });
-
-      it('user entity의 edit action은 "수정" 텍스트를 표시한다', () => {
-        const entity = { id: 1 };
-        render(<Button entityType="user" action="edit" entity={entity} />);
-        expect(screen.getByText("수정")).toBeInTheDocument();
-      });
-
-      it('user entity의 delete action은 "삭제" 텍스트와 danger variant를 적용한다', () => {
-        const entity = { id: 1, role: "user" };
-        render(<Button entityType="user" action="delete" entity={entity} />);
-        const button = screen.getByText("삭제");
-        expect(button).toBeInTheDocument();
-        expect(button).toHaveClass("bg-danger");
-      });
-    });
-
-    describe("post entity", () => {
-      it("published 상태의 글에 대한 publish action은 버튼을 비활성화한다", () => {
-        const entity = { id: 1, status: "published" };
-        render(
-          <Button entityType="post" action="publish" entity={entity}>
-            게시
-          </Button>
-        );
-        expect(screen.getByRole("button")).toBeDisabled();
-      });
-
-      it("draft 상태의 글에 대한 publish action은 버튼을 활성화한다", () => {
-        const entity = { id: 1, status: "draft" };
-        render(
-          <Button entityType="post" action="publish" entity={entity}>
-            게시
-          </Button>
-        );
-        expect(screen.getByRole("button")).not.toBeDisabled();
-      });
-
-      it("published 상태가 아닌 글에 대한 archive action은 버튼을 비활성화한다", () => {
-        const entity = { id: 1, status: "draft" };
-        render(
-          <Button entityType="post" action="archive" entity={entity}>
-            보관
-          </Button>
-        );
-        expect(screen.getByRole("button")).toBeDisabled();
-      });
-
-      it("published 상태의 글에 대한 archive action은 버튼을 활성화한다", () => {
-        const entity = { id: 1, status: "published" };
-        render(
-          <Button entityType="post" action="archive" entity={entity}>
-            보관
-          </Button>
-        );
-        expect(screen.getByRole("button")).not.toBeDisabled();
-      });
-
-      it('post entity의 create action은 "새 게시글 만들기" 텍스트를 표시한다', () => {
-        const entity = { id: 1 };
-        render(<Button entityType="post" action="create" entity={entity} />);
-        expect(screen.getByText("새 게시글 만들기")).toBeInTheDocument();
-      });
-
-      it('post entity의 edit action은 "수정" 텍스트를 표시한다', () => {
-        const entity = { id: 1 };
-        render(<Button entityType="post" action="edit" entity={entity} />);
-        expect(screen.getByText("수정")).toBeInTheDocument();
-      });
-
-      it('post entity의 delete action은 "삭제" 텍스트와 danger variant를 적용한다', () => {
-        const entity = { id: 1 };
-        render(<Button entityType="post" action="delete" entity={entity} />);
-        const button = screen.getByText("삭제");
-        expect(button).toBeInTheDocument();
-        expect(button).toHaveClass("bg-danger");
-      });
-
-      it('post entity의 publish action은 "게시" 텍스트와 success variant를 적용한다', () => {
-        const entity = { id: 1, status: "draft" };
-        render(<Button entityType="post" action="publish" entity={entity} />);
-        const button = screen.getByText("게시");
-        expect(button).toBeInTheDocument();
-        expect(button).toHaveClass("bg-success");
-      });
-
-      it('post entity의 archive action은 "보관" 텍스트와 secondary variant를 적용한다', () => {
-        const entity = { id: 1, status: "published" };
-        render(<Button entityType="post" action="archive" entity={entity} />);
-        const button = screen.getByText("보관");
-        expect(button).toBeInTheDocument();
-        expect(button).toHaveClass("bg-secondary");
-      });
-    });
-
-    it("children이 명시되면 자동 생성된 label 대신 children을 표시한다", () => {
-      const entity = { id: 1 };
-      render(
-        <Button entityType="post" action="create" entity={entity}>
-          커스텀 버튼
-        </Button>
-      );
-      expect(screen.getByText("커스텀 버튼")).toBeInTheDocument();
-      expect(screen.queryByText("새 게시글 만들기")).not.toBeInTheDocument();
-    });
-
-    it("entityType, action, entity 중 하나라도 없으면 도메인 로직을 적용하지 않는다", () => {
-      const entity = { id: 1, role: "admin" };
-      // entityType 없음
-      render(
-        <Button action="delete" entity={entity}>
-          삭제
-        </Button>
-      );
-      expect(screen.getByRole("button")).not.toBeDisabled();
-    });
-  });
-
   describe("props 조합 테스트", () => {
-    it("모든 기본 props를 함께 사용할 수 있다", () => {
+    it("모든 props를 함께 사용할 수 있다", () => {
       const handleClick = vi.fn();
       render(
         <Button
@@ -263,37 +126,7 @@ describe("Button", () => {
       );
       const button = screen.getByRole("button");
       expect(button).toHaveAttribute("type", "submit");
-      expect(button).toHaveClass("bg-success", "px-6 py-3 text-lg", "w-full");
-    });
-
-    it("disabled prop이 명시되면 도메인 로직의 disabled보다 우선된다", () => {
-      const entity = { id: 1, status: "draft" };
-      render(
-        <Button
-          entityType="post"
-          action="publish"
-          entity={entity}
-          disabled={true}>
-          게시
-        </Button>
-      );
-      // draft 상태라 도메인 로직으로는 활성화되어야 하지만, disabled prop이 true이므로 비활성화
-      expect(screen.getByRole("button")).toBeDisabled();
-    });
-
-    it("action의 자동 variant가 명시된 variant prop을 덮어쓴다", () => {
-      const entity = { id: 1 };
-      render(
-        <Button
-          entityType="post"
-          action="delete"
-          entity={entity}
-          variant="primary">
-          삭제
-        </Button>
-      );
-      // action이 나중에 처리되므로 delete action의 danger variant가 적용됨
-      expect(screen.getByRole("button")).toHaveClass("bg-danger");
+      expect(button).toHaveClass("bg-success", "px-6", "py-3", "text-lg", "w-full");
     });
   });
 
@@ -305,16 +138,6 @@ describe("Button", () => {
 
     it("onClick 없이 렌더링할 수 있다", () => {
       render(<Button>버튼</Button>);
-      expect(screen.getByRole("button")).toBeInTheDocument();
-    });
-
-    it("entity에 필요한 속성이 없어도 에러 없이 렌더링된다", () => {
-      const entity = {};
-      render(
-        <Button entityType="user" action="delete" entity={entity}>
-          삭제
-        </Button>
-      );
       expect(screen.getByRole("button")).toBeInTheDocument();
     });
   });
