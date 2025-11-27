@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Button, Table } from "@repo/after";
+import { Button, Table, Badge } from "@repo/after";
+import type { Column } from "@repo/after";
 import { userService, type User } from "@/services/userService";
 import { postService, type Post } from "@/services/postService";
 import { PageHeader } from "@/pages/management-page/components/PageHeader";
@@ -230,31 +231,195 @@ export const ManagementPage: React.FC = () => {
     }
   };
 
-  // 🚨 Table 컴포넌트에 로직을 위임하여 간소화
-  const renderTableColumns = () => {
-    if (entityType === "user") {
-      return [
-        { key: "id", header: "ID", width: "60px" },
-        { key: "username", header: "사용자명", width: "150px" },
-        { key: "email", header: "이메일" },
-        { key: "role", header: "역할", width: "120px" },
-        { key: "status", header: "상태", width: "120px" },
-        { key: "createdAt", header: "생성일", width: "120px" },
-        { key: "lastLogin", header: "마지막 로그인", width: "140px" },
-        { key: "actions", header: "관리", width: "200px" },
-      ];
-    } else {
-      return [
-        { key: "id", header: "ID", width: "60px" },
-        { key: "title", header: "제목" },
-        { key: "author", header: "작성자", width: "120px" },
-        { key: "category", header: "카테고리", width: "140px" },
-        { key: "status", header: "상태", width: "120px" },
-        { key: "views", header: "조회수", width: "100px" },
-        { key: "createdAt", header: "작성일", width: "120px" },
-        { key: "actions", header: "관리", width: "250px" },
-      ];
-    }
+  const getUserColumns = () => {
+    const columns: Column<User>[] = [
+      { key: "id", header: "ID", width: "60px" },
+      { key: "username", header: "사용자명", width: "150px" },
+      { key: "email", header: "이메일" },
+      {
+        key: "role",
+        header: "역할",
+        width: "120px",
+        render: (user: User) => {
+          const roleConfig: Record<
+            "admin" | "moderator" | "user" | "guest",
+            {
+              variant: "danger" | "warning" | "primary" | "secondary";
+              text: string;
+            }
+          > = {
+            admin: { variant: "danger", text: "관리자" },
+            moderator: { variant: "warning", text: "운영자" },
+            user: { variant: "primary", text: "사용자" },
+            guest: { variant: "secondary", text: "게스트" },
+          };
+          const config = roleConfig[user.role];
+          return (
+            <Badge variant={config.variant} showIcon>
+              {config.text}
+            </Badge>
+          );
+        },
+      },
+      {
+        key: "status",
+        header: "상태",
+        width: "120px",
+        render: (user: User) => {
+          const statusConfig: Record<
+            User["status"],
+            { variant: "success" | "warning" | "danger"; text: string }
+          > = {
+            active: { variant: "success", text: "활성" },
+            inactive: { variant: "warning", text: "비활성" },
+            suspended: { variant: "danger", text: "정지" },
+          };
+          const config = statusConfig[user.status];
+          return (
+            <Badge variant={config.variant} showIcon>
+              {config.text}
+            </Badge>
+          );
+        },
+      },
+      { key: "createdAt", header: "생성일", width: "120px" },
+      {
+        key: "lastLogin",
+        header: "마지막 로그인",
+        width: "140px",
+        render: (user: User) => user.lastLogin || "-",
+      },
+      {
+        key: "actions",
+        header: "관리",
+        width: "200px",
+        render: (user: User) => (
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="primary"
+              onClick={() => handleEdit(user)}>
+              수정
+            </Button>
+            <Button
+              size="sm"
+              variant="danger"
+              onClick={() => handleDelete(user.id)}>
+              삭제
+            </Button>
+          </div>
+        ),
+      },
+    ];
+    return columns;
+  };
+
+  const getPostColumns = () => {
+    const columns: Column<Post>[] = [
+      { key: "id", header: "ID", width: "60px" },
+      { key: "title", header: "제목" },
+      { key: "author", header: "작성자", width: "120px" },
+      {
+        key: "category",
+        header: "카테고리",
+        width: "140px",
+        render: (post: Post) => {
+          const categoryConfig: Record<
+            Post["category"],
+            "primary" | "info" | "danger" | "secondary"
+          > = {
+            development: "primary",
+            design: "info",
+            accessibility: "danger",
+            news: "secondary",
+          };
+          return (
+            <Badge variant={categoryConfig[post.category]} pill>
+              {post.category}
+            </Badge>
+          );
+        },
+      },
+      {
+        key: "status",
+        header: "상태",
+        width: "120px",
+        render: (post: Post) => {
+          const statusConfig: Record<
+            "published" | "draft" | "archived" | "pending" | "rejected",
+            {
+              variant: "success" | "warning" | "secondary" | "info" | "danger";
+              text: string;
+            }
+          > = {
+            published: { variant: "success", text: "게시됨" },
+            draft: { variant: "warning", text: "임시저장" },
+            archived: { variant: "secondary", text: "보관됨" },
+            pending: { variant: "info", text: "대기중" },
+            rejected: { variant: "danger", text: "거부됨" },
+          };
+          const config = statusConfig[post.status];
+          return (
+            <Badge variant={config.variant} showIcon>
+              {config.text}
+            </Badge>
+          );
+        },
+      },
+      {
+        key: "views",
+        header: "조회수",
+        width: "100px",
+        render: (post: Post) => post.views.toLocaleString(),
+      },
+      { key: "createdAt", header: "작성일", width: "120px" },
+      {
+        key: "actions",
+        header: "관리",
+        width: "250px",
+        render: (post: Post) => (
+          <div className="flex gap-2 flex-wrap">
+            <Button
+              size="sm"
+              variant="primary"
+              onClick={() => handleEdit(post)}>
+              수정
+            </Button>
+            {post.status === "draft" && (
+              <Button
+                size="sm"
+                variant="success"
+                onClick={() => handleStatusAction(post.id, "publish")}>
+                게시
+              </Button>
+            )}
+            {post.status === "published" && (
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => handleStatusAction(post.id, "archive")}>
+                보관
+              </Button>
+            )}
+            {post.status === "archived" && (
+              <Button
+                size="sm"
+                variant="primary"
+                onClick={() => handleStatusAction(post.id, "restore")}>
+                복원
+              </Button>
+            )}
+            <Button
+              size="sm"
+              variant="danger"
+              onClick={() => handleDelete(post.id)}>
+              삭제
+            </Button>
+          </div>
+        ),
+      },
+    ];
+    return columns;
   };
 
   const stats = getStats();
@@ -306,18 +471,21 @@ export const ManagementPage: React.FC = () => {
             <StatsSection {...stats} />
 
             <div className="border border-gray-300 bg-white overflow-auto">
-              <Table
-                columns={renderTableColumns()}
-                data={data}
-                striped
-                hover
-                entityType={entityType}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-                onPublish={(id) => handleStatusAction(id, "publish")}
-                onArchive={(id) => handleStatusAction(id, "archive")}
-                onRestore={(id) => handleStatusAction(id, "restore")}
-              />
+              {entityType === "user" ? (
+                <Table
+                  columns={getUserColumns()}
+                  data={data as User[]}
+                  striped
+                  hover
+                />
+              ) : (
+                <Table
+                  columns={getPostColumns()}
+                  data={data as Post[]}
+                  striped
+                  hover
+                />
+              )}
             </div>
           </div>
         </div>

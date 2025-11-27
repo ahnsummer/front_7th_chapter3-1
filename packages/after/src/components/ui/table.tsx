@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "@repo/utils";
 import { Button } from "./button";
-import { Badge, type BadgeProps } from "./badge";
 
 const tableContainerVariants = cva("overflow-x-auto");
 
@@ -53,35 +52,27 @@ const sortHeaderVariants = cva("flex items-center gap-1", {
   },
 });
 
-type Column = {
+type Column<T = any> = {
   key: string;
   header: string;
   width?: string;
   sortable?: boolean;
+  render?: (row: T) => React.ReactNode;
 };
 
-// 🚨 Bad Practice: UI 컴포넌트가 도메인 타입을 알고 있음
-type TableProps = {
-  columns?: Column[];
-  data?: any[];
+type TableProps<T = any> = {
+  columns?: Column<T>[];
+  data?: T[];
   striped?: boolean;
   bordered?: boolean;
   hover?: boolean;
   pageSize?: number;
   searchable?: boolean;
   sortable?: boolean;
-  onRowClick?: (row: any) => void;
-
-  // 🚨 도메인 관심사 추가
-  entityType?: "user" | "post";
-  onEdit?: (item: any) => void;
-  onDelete?: (id: number) => void;
-  onPublish?: (id: number) => void;
-  onArchive?: (id: number) => void;
-  onRestore?: (id: number) => void;
+  onRowClick?: (row: T) => void;
 };
 
-const Table = ({
+const Table = <T extends Record<string, any> = any>({
   columns,
   data = [],
   striped = false,
@@ -91,14 +82,8 @@ const Table = ({
   searchable = false,
   sortable = false,
   onRowClick,
-  entityType,
-  onEdit,
-  onDelete,
-  onPublish,
-  onArchive,
-  onRestore,
-}: TableProps) => {
-  const [tableData, setTableData] = useState<any[]>(data);
+}: TableProps<T>) => {
+  const [tableData, setTableData] = useState<T[]>(data);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState("");
@@ -148,191 +133,14 @@ const Table = ({
 
   const totalPages = Math.ceil(filteredData.length / pageSize);
 
-  const actualColumns =
+  const actualColumns: Column<T>[] =
     columns ||
     (tableData[0]
       ? Object.keys(tableData[0]).map((key) => ({
           key,
           header: key,
-          width: undefined,
         }))
       : []);
-
-  // 🚨 Bad Practice: Table 컴포넌트가 도메인별 렌더링 로직을 알고 있음
-  const renderCell = (row: any, columnKey: string) => {
-    const value = row[columnKey];
-
-    // 도메인별 특수 렌더링
-    if (entityType === "user") {
-      if (columnKey === "role") {
-        const badgeProps: Pick<BadgeProps, "variant" | "children"> = {
-          variant: "primary",
-          children: "",
-        };
-
-        switch (value) {
-          case "admin":
-            badgeProps.variant = "danger";
-            badgeProps.children = "관리자";
-            break;
-          case "moderator":
-            badgeProps.variant = "warning";
-            badgeProps.children = "운영자";
-            break;
-          case "user":
-            badgeProps.variant = "primary";
-            badgeProps.children = "사용자";
-            break;
-          case "guest":
-            badgeProps.variant = "secondary";
-            badgeProps.children = "게스트";
-            break;
-        }
-
-        return <Badge {...badgeProps} showIcon />;
-      }
-      if (columnKey === "status") {
-        const badgeProps: Pick<BadgeProps, "variant" | "children"> = {
-          variant: "primary",
-          children: "",
-        };
-
-        switch (value) {
-          case "active":
-            badgeProps.variant = "success";
-            badgeProps.children = "게시됨";
-            break;
-          case "inactive":
-            badgeProps.variant = "warning";
-            badgeProps.children = "임시저장";
-            break;
-          default:
-            badgeProps.variant = "danger";
-            badgeProps.children = "거부됨";
-            break;
-        }
-
-        return <Badge {...badgeProps} showIcon />;
-      }
-      if (columnKey === "lastLogin") {
-        return value || "-";
-      }
-      if (columnKey === "actions") {
-        return (
-          <div className="flex gap-2">
-            <Button size="sm" variant="primary" onClick={() => onEdit?.(row)}>
-              수정
-            </Button>
-            <Button
-              size="sm"
-              variant="danger"
-              onClick={() => onDelete?.(row.id)}>
-              삭제
-            </Button>
-          </div>
-        );
-      }
-    }
-
-    if (entityType === "post") {
-      if (columnKey === "category") {
-        const type =
-          value === "development"
-            ? "primary"
-            : value === "design"
-            ? "info"
-            : value === "accessibility"
-            ? "danger"
-            : "secondary";
-
-        return (
-          <Badge variant={type} pill>
-            {value}
-          </Badge>
-        );
-      }
-      if (columnKey === "status") {
-        const badgeProps: Pick<BadgeProps, "variant" | "children"> = {
-          variant: "primary",
-          children: "",
-        };
-
-        switch (value) {
-          case "published":
-            badgeProps.variant = "success";
-            badgeProps.children = "게시됨";
-            break;
-          case "draft":
-            badgeProps.variant = "warning";
-            badgeProps.children = "임시저장";
-            break;
-          case "archived":
-            badgeProps.variant = "secondary";
-            badgeProps.children = "보관됨";
-            break;
-          case "pending":
-            badgeProps.variant = "info";
-            badgeProps.children = "대기중";
-            break;
-          case "rejected":
-            badgeProps.variant = "danger";
-            badgeProps.children = "거부됨";
-            break;
-        }
-
-        return <Badge {...badgeProps} showIcon />;
-      }
-      if (columnKey === "views") {
-        return value?.toLocaleString() || "0";
-      }
-      if (columnKey === "actions") {
-        return (
-          <div className="flex gap-2 flex-wrap">
-            <Button size="sm" variant="primary" onClick={() => onEdit?.(row)}>
-              수정
-            </Button>
-            {row.status === "draft" && (
-              <Button
-                size="sm"
-                variant="success"
-                onClick={() => onPublish?.(row.id)}>
-                게시
-              </Button>
-            )}
-            {row.status === "published" && (
-              <Button
-                size="sm"
-                variant="secondary"
-                onClick={() => onArchive?.(row.id)}>
-                보관
-              </Button>
-            )}
-            {row.status === "archived" && (
-              <Button
-                size="sm"
-                variant="primary"
-                onClick={() => onRestore?.(row.id)}>
-                복원
-              </Button>
-            )}
-            <Button
-              size="sm"
-              variant="danger"
-              onClick={() => onDelete?.(row.id)}>
-              삭제
-            </Button>
-          </div>
-        );
-      }
-    }
-
-    // React Element면 그대로 렌더링
-    if (React.isValidElement(value)) {
-      return value;
-    }
-
-    return value;
-  };
 
   return (
     <div className={tableContainerVariants()}>
@@ -375,7 +183,7 @@ const Table = ({
               className={cn(onRowClick ? "cursor-pointer" : "cursor-default")}>
               {actualColumns.map((column) => (
                 <td key={column.key} className={tdVariants()}>
-                  {entityType ? renderCell(row, column.key) : row[column.key]}
+                  {column.render ? column.render(row) : row[column.key]}
                 </td>
               ))}
             </tr>
