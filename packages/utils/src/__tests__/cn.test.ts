@@ -8,7 +8,9 @@ describe("cn", () => {
     });
 
     it("여러 클래스를 병합한다", () => {
-      expect(cn("text-red-500", "bg-blue-500")).toBe("text-red-500 bg-blue-500");
+      expect(cn("text-red-500", "bg-blue-500")).toBe(
+        "text-red-500 bg-blue-500"
+      );
     });
 
     it("빈 문자열을 무시한다", () => {
@@ -99,9 +101,9 @@ describe("cn", () => {
   describe("복잡한 시나리오", () => {
     it("조건부와 충돌 해결을 함께 사용한다", () => {
       const isError = true;
-      expect(
-        cn("border-gray-400", isError && "border-red-500")
-      ).toBe("border-red-500");
+      expect(cn("border-gray-400", isError && "border-red-500")).toBe(
+        "border-red-500"
+      );
     });
 
     it("여러 조건과 충돌을 처리한다", () => {
@@ -119,13 +121,19 @@ describe("cn", () => {
 
     it("객체와 문자열을 섞어 사용한다", () => {
       expect(
-        cn("base-class", { "error-class": true, "disabled-class": false }, "extra-class")
+        cn(
+          "base-class",
+          { "error-class": true, "disabled-class": false },
+          "extra-class"
+        )
       ).toBe("base-class error-class extra-class");
     });
 
     it("undefined가 있는 배열을 처리한다", () => {
       const conditionalClass = false ? "hidden" : undefined;
-      expect(cn("flex", conditionalClass, "items-center")).toBe("flex items-center");
+      expect(cn("flex", conditionalClass, "items-center")).toBe(
+        "flex items-center"
+      );
     });
 
     it("중복된 클래스를 제거한다", () => {
@@ -149,14 +157,15 @@ describe("cn", () => {
       const errorClasses = false;
       const customClasses = "w-1/2"; // width 덮어쓰기
 
-      expect(cn(baseClasses, errorClasses && "border-red-500", customClasses)).toBe(
-        "px-2.5 py-2 border w-1/2"
-      );
+      expect(
+        cn(baseClasses, errorClasses && "border-red-500", customClasses)
+      ).toBe("px-2.5 py-2 border w-1/2");
     });
 
     it("cva variants와 className을 병합한다", () => {
       // cva에서 생성된 클래스
-      const variantClasses = "inline-flex items-center px-2 py-1 text-sm bg-primary";
+      const variantClasses =
+        "inline-flex items-center px-2 py-1 text-sm bg-primary";
       // 사용자 커스텀 클래스
       const className = "bg-blue-600 text-base"; // bg, text-size 덮어쓰기
 
@@ -168,8 +177,10 @@ describe("cn", () => {
     it("Table 컴포넌트의 동적 클래스를 병합한다", () => {
       const baseClasses = "cursor-default";
       const clickable = true;
-      
-      expect(cn(clickable ? "cursor-pointer" : baseClasses)).toBe("cursor-pointer");
+
+      expect(cn(clickable ? "cursor-pointer" : baseClasses)).toBe(
+        "cursor-pointer"
+      );
     });
 
     it("responsive 클래스와 일반 클래스를 병합한다", () => {
@@ -222,4 +233,3 @@ describe("cn", () => {
     });
   });
 });
-
