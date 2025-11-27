@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "@repo/utils";
+import { Button } from "./button";
 
 const dialogOverlayVariants = cva(
-  "fixed top-0 left-0 right-0 bottom-0 bg-black/50 flex items-center justify-center z-[1000] p-4"
+  "fixed top-0 left-0 right-0 bottom-0 bg-black/50 flex items-center justify-center z-1000 p-4"
 );
 
 const dialogContentVariants = cva(
@@ -28,17 +29,14 @@ const dialogHeaderVariants = cva(
 
 const dialogTitleVariants = cva("m-0 text-xl font-medium text-black/87");
 
-const dialogCloseVariants = cva(
-  "bg-transparent border-0 text-[28px] leading-none text-black/54 cursor-pointer p-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-black/4"
-);
-
 const dialogBodyVariants = cva("px-6 py-6 overflow-y-auto flex-1");
 
 const dialogFooterVariants = cva(
   "px-6 py-4 border-t border-black/12 flex gap-2 justify-end"
 );
 
-interface DialogProps {
+type DialogProps = {
+  size?: "sm" | "md" | "lg";
   isOpen: boolean;
   onClose: () => void;
 
@@ -53,10 +51,7 @@ interface DialogProps {
   showFooter?: boolean;
   footerContent?: React.ReactNode; // 커스텀 footer
   footer?: React.ReactNode; // 또는 footer prop으로도 가능
-
-  // Size
-  size?: "sm" | "md" | "lg";
-}
+};
 
 const Dialog = ({
   isOpen,
@@ -92,9 +87,9 @@ const Dialog = ({
       return (
         <div className={dialogHeaderVariants()}>
           <h3 className={dialogTitleVariants()}>{title}</h3>
-          <button className={dialogCloseVariants()} onClick={onClose}>
+          <Button variant="secondary" size="sm" onClick={onClose}>
             ×
-          </button>
+          </Button>
         </div>
       );
     }
@@ -120,46 +115,40 @@ const Dialog = ({
   );
 };
 
-// Export 개별 컴포넌트 (조립식으로 사용 가능)
-const DialogHeader: React.FC<{
-  children: React.ReactNode;
+export type DialogBaseProps = {
+  children: React.ReactNode;                                                       
   className?: string;
-}> = ({ children, className }) => {
+};
+
+const DialogHeader = ({ children, className }: DialogBaseProps) => {
   return (
     <div className={cn(dialogHeaderVariants(), className)}>{children}</div>
   );
 };
 
-const DialogTitle: React.FC<{
-  children: React.ReactNode;
-  className?: string;
-}> = ({ children, className }) => {
+const DialogTitle = ({ children, className }: DialogBaseProps) => {
   return <h3 className={cn(dialogTitleVariants(), className)}>{children}</h3>;
 };
 
-const DialogClose: React.FC<{
+const DialogClose = ({
+  onClick,
+  children = "×",
+}: {
   onClick: () => void;
-  className?: string;
   children?: React.ReactNode;
-}> = ({ onClick, className, children = "×" }) => {
+}) => {
   return (
-    <button className={cn(dialogCloseVariants(), className)} onClick={onClick}>
+    <Button variant="secondary" size="sm" onClick={onClick}>
       {children}
-    </button>
+    </Button>
   );
 };
 
-const DialogBody: React.FC<{
-  children: React.ReactNode;
-  className?: string;
-}> = ({ children, className }) => {
+const DialogBody = ({ children, className }: DialogBaseProps) => {
   return <div className={cn(dialogBodyVariants(), className)}>{children}</div>;
 };
 
-const DialogFooter: React.FC<{
-  children: React.ReactNode;
-  className?: string;
-}> = ({ children, className }) => {
+const DialogFooter = ({ children, className }: DialogBaseProps) => {
   return (
     <div className={cn(dialogFooterVariants(), className)}>{children}</div>
   );
