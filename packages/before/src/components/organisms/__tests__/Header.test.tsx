@@ -104,7 +104,7 @@ describe("Header", () => {
 
   describe("로고 스타일", () => {
     it("로고 아이콘에 배경색과 border-radius를 적용한다", () => {
-      const { container } = render(<Header />);
+      render(<Header />);
       // "L" 텍스트를 감싸는 div를 직접 찾기
       const logoIcon = screen.getByText("L");
       const style = logoIcon.getAttribute("style");
@@ -115,7 +115,7 @@ describe("Header", () => {
     });
 
     it("회사명에 올바른 스타일을 적용한다", () => {
-      const { container } = render(<Header />);
+      render(<Header />);
       const companyName = screen.getByText("Hanghae Company");
       expect(companyName.tagName).toBe("H1");
       expect(companyName).toHaveStyle({
@@ -128,7 +128,7 @@ describe("Header", () => {
     });
 
     it("부제목에 올바른 스타일을 적용한다", () => {
-      const { container } = render(<Header />);
+      render(<Header />);
       const subtitle = screen.getByText("Design System Migration Project");
       expect(subtitle.tagName).toBe("P");
       expect(subtitle).toHaveStyle("font-size: 11px");
@@ -138,7 +138,7 @@ describe("Header", () => {
 
   describe("사용자 정보 스타일", () => {
     it("사용자 이름에 올바른 스타일을 적용한다", () => {
-      const { container } = render(<Header />);
+      render(<Header />);
       const userName = screen.getByText("Demo User");
       expect(userName).toHaveStyle({
         fontSize: "14px",
@@ -148,7 +148,7 @@ describe("Header", () => {
     });
 
     it("사용자 이메일에 올바른 스타일을 적용한다", () => {
-      const { container } = render(<Header />);
+      render(<Header />);
       const userEmail = screen.getByText("demo@example.com");
       expect(userEmail).toHaveStyle({
         fontSize: "12px",
@@ -157,7 +157,7 @@ describe("Header", () => {
     });
 
     it("아바타에 원형 스타일을 적용한다", () => {
-      const { container } = render(<Header />);
+      render(<Header />);
       const avatar = screen.getByText("DU");
       expect(avatar).toHaveStyle({
         width: "40px",
