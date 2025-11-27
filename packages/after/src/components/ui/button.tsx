@@ -47,11 +47,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-primary text-white hover:bg-primary/90",
-        secondary: "bg-secondary text-gray-600 hover:bg-secondary/80",
-        danger: "bg-danger text-white hover:bg-danger/90",
-        success: "bg-success text-white hover:bg-success/90",
-        info: "bg-info text-white hover:bg-info/90",
+        primary:
+          "bg-primary text-primary-foreground hover:bg-primary-hover dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary-hover",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary-hover dark:bg-secondary dark:text-secondary-foreground dark:hover:bg-secondary-hover",
+        danger:
+          "bg-danger text-danger-foreground hover:bg-danger-hover dark:bg-danger dark:text-danger-foreground dark:hover:bg-danger-hover",
+        success:
+          "bg-success text-success-foreground hover:bg-success-hover dark:bg-success dark:text-success-foreground dark:hover:bg-success-hover",
+        info: "bg-info text-info-foreground hover:bg-info/90 dark:bg-info dark:text-info-foreground dark:hover:bg-info/90",
       },
       size: {
         sm: "px-3 py-1.5 text-sm",

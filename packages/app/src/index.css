@@ -15,4 +15,11 @@
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     line-height: var(--line-height-normal);
   }
+
+  /* 다크모드 전환 애니메이션 */
+  * {
+    transition-property: background-color, border-color, color;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
 }

@@ -87,14 +87,14 @@ export const ManagementPage: React.FC = () => {
       : calculatePostStats(entityManager.data as Post[]);
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 dark:bg-background">
       <div className="max-w-[1200px] mx-auto p-5">
         <PageHeader
           title="관리 시스템"
           description="사용자와 게시글을 관리하세요"
         />
 
-        <div className="bg-white border border-gray-300 p-2.5">
+        <div className="bg-white dark:bg-gray-50 border border-gray-300 dark:border-gray-200 p-2.5">
           <EntityTabs
             entityType={entityType}
             onEntityTypeChange={entityManager.withFormReset(setEntityType)}
@@ -121,7 +121,7 @@ export const ManagementPage: React.FC = () => {
 
             <StatsSection {...stats} />
 
-            <div className="border border-gray-300 bg-white overflow-auto">
+            <div className="border border-gray-300 dark:border-gray-200 bg-white dark:bg-gray-50 overflow-auto">
               {entityType === "user" ? (
                 <Table
                   columns={getUserColumns({

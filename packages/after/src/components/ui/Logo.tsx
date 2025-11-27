@@ -9,11 +9,11 @@ const logoIconVariants = cva(
 const logoTextContainerVariants = cva("");
 
 const logoTitleVariants = cva(
-  "text-lg font-bold text-gray-900 m-0 leading-none"
+  "text-lg font-bold text-gray-900 dark:text-gray-900 m-0 leading-none"
 );
 
 const logoSubtitleVariants = cva(
-  "text-[11px] text-gray-700 m-0 leading-none mt-0.5"
+  "text-[11px] text-gray-700 dark:text-gray-700 m-0 leading-none mt-0.5"
 );
 
 const Logo = () => {

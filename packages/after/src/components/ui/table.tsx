@@ -5,10 +5,10 @@ import { Button } from "./button";
 
 const tableContainerVariants = cva("overflow-x-auto");
 
-const tableVariants = cva("w-full border-collapse text-sm bg-white", {
+const tableVariants = cva("w-full border-collapse text-sm bg-white dark:bg-gray-50", {
   variants: {
     striped: {
-      true: "[&_tbody_tr:nth-child(even)]:bg-gray-50",
+      true: "[&_tbody_tr:nth-child(even)]:bg-gray-50 dark:[&_tbody_tr:nth-child(even)]:bg-gray-100",
       false: "",
     },
     bordered: {
@@ -16,7 +16,7 @@ const tableVariants = cva("w-full border-collapse text-sm bg-white", {
       false: "",
     },
     hover: {
-      true: "[&_tbody_tr:hover]:bg-black/4",
+      true: "[&_tbody_tr:hover]:bg-black/4 dark:[&_tbody_tr:hover]:bg-white/10",
       false: "",
     },
   },
@@ -27,13 +27,13 @@ const tableVariants = cva("w-full border-collapse text-sm bg-white", {
   },
 });
 
-const theadVariants = cva("bg-gray-50");
+const theadVariants = cva("bg-gray-50 dark:bg-gray-100");
 
 const thVariants = cva(
-  "px-4 py-4 text-left font-medium text-xs text-black/60 uppercase tracking-wide border-b-2 border-black/12"
+  "px-4 py-4 text-left font-medium text-xs text-black/60 dark:text-gray-600 uppercase tracking-wide border-b-2 border-black/12 dark:border-gray-200"
 );
 
-const tdVariants = cva("px-4 py-4 text-black/87 border-b border-black/8");
+const tdVariants = cva("px-4 py-4 text-black/87 dark:text-gray-700 border-b border-black/8 dark:border-gray-200");
 
 const tbodyLastRowVariants = cva("[&_tr:last-child_td]:border-b-0");
 

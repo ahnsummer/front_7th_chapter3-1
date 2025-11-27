@@ -1,7 +1,7 @@
 import { cn } from "@repo/utils";
 import { cva } from "class-variance-authority";
 
-const helperTextVariants = cva("mt-1 text-gray-600 text-xs", {
+const helperTextVariants = cva("mt-1 text-gray-600 dark:text-gray-600 text-xs", {
   variants: {
     hasError: {
       true: "text-danger",

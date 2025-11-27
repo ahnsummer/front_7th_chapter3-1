@@ -6,7 +6,7 @@ import { Label } from "./label";
 import { HelperText } from "./helper-text";
 
 const selectVariants = cva(
-  "px-2.5 py-2 text-sm border border-gray-400 rounded-md bg-white box-border transition-colors focus:border-[var(--color-primary)] focus:outline-none disabled:bg-[var(--color-muted)] disabled:cursor-not-allowed",
+  "px-2.5 py-2 text-sm border border-gray-400 dark:border-gray-400 rounded-md bg-white dark:bg-input box-border transition-colors focus:border-[var(--color-primary)] dark:focus:border-[var(--color-primary)] focus:outline-none disabled:bg-[var(--color-muted)] dark:disabled:bg-[var(--color-muted)] disabled:cursor-not-allowed",
   {
     variants: {
       size: {

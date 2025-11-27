@@ -5,7 +5,7 @@ import { HelperText } from "./helper-text";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const textareaVariants = cva(
-  "w-full min-h-9 px-3.5 py-4 text-sm font-normal leading-1.5 text-black/87 border border-black/23 rounded bg-white box-border transition-[border-color] duration-200 outline-none resize-y focus:border-primary disabled:bg-black/12 disabled:cursor-not-allowed",
+  "w-full min-h-9 px-3.5 py-4 text-sm font-normal leading-1.5 text-black/87 dark:text-gray-700 border border-black/23 dark:border-gray-200 rounded bg-white dark:bg-input box-border transition-[border-color] duration-200 outline-none resize-y focus:border-primary dark:focus:border-primary disabled:bg-black/12 dark:disabled:bg-muted disabled:cursor-not-allowed",
   {
     variants: {
       hasError: {

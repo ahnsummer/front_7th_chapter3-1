@@ -6,7 +6,7 @@ import { Label } from "./label";
 import { HelperText } from "./helper-text";
 
 const inputVariants = cva(
-  "w-full px-2.5 py-2 border border-gray-400 rounded-md text-sm text-gray-950 bg-white box-border focus:border-primary focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed",
+  "w-full px-2.5 py-2 border border-gray-400 dark:border-gray-400 rounded-md text-sm text-gray-950 dark:text-gray-950 bg-white dark:bg-input box-border focus:border-primary dark:focus:border-primary focus:outline-none disabled:bg-gray-100 dark:disabled:bg-muted disabled:cursor-not-allowed",
   {
     variants: {
       size: {
