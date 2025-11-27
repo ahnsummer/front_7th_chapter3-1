@@ -111,7 +111,7 @@ describe("Header", () => {
       const subtitle = screen.getByText("Design System Migration Project");
       expect(subtitle.tagName).toBe("P");
       expect(subtitle).toHaveClass(
-        "text-[11px] text-gray-700 m-0 leading-none mt-0.5"
+        "text-xs text-gray-700 dark:text-gray-700 m-0 leading-none mt-0.5"
       );
     });
   });

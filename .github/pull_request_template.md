@@ -84,7 +84,7 @@
 ## 심화 과제
 
 - [x] Dark Mode 완전 지원 (CSS Variables + Tailwind)
-- [ ] Design Token 시스템 고도화 (색상 팔레트, 타이포그래피 스케일)
+- [x] Design Token 시스템 고도화 (색상 팔레트, 타이포그래피 스케일)
 - [x] 뷰와 비즈니스로직이 분리되도록
 
 ---

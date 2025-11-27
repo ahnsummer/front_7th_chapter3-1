@@ -4,7 +4,6 @@ import { StatCard } from "./StatCard";
 interface Stat {
   label: string;
   value: number;
-  color: string;
 }
 
 interface StatsSectionProps {

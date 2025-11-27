@@ -237,8 +237,8 @@ describe("Dialog", () => {
       const { container } = render(<Dialog {...defaultProps} />);
       // overlay (fixed)
       expect(container.querySelector(".fixed")).toBeInTheDocument();
-      // content (bg-white rounded)
-      expect(container.querySelector(".bg-white.rounded")).toBeInTheDocument();
+      // content (bg-white rounded-xl)
+      expect(container.querySelector(".bg-white.rounded-xl")).toBeInTheDocument();
       // body (overflow-y-auto)
       expect(container.querySelector(".overflow-y-auto")).toBeInTheDocument();
     });
@@ -271,7 +271,7 @@ describe("Dialog", () => {
         </Dialog>
       );
 
-      const content = container.querySelector(".bg-white.rounded");
+      const content = container.querySelector(".bg-white.rounded-xl");
       const children = content?.children;
 
       // header (border-b)

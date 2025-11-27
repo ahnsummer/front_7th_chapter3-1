@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@repo/utils";
 
 const alertVariants = cva(
-  "px-3 py-2.5 mb-4 rounded-[3px] border border-solid flex gap-2 items-start",
+  "px-3 py-2.5 mb-4 rounded-sm border border-solid flex gap-2 items-start",
   {
     variants: {
       variant: {
@@ -24,7 +24,7 @@ const alertIconVariants = cva("text-xl shrink-0");
 
 const alertContentVariants = cva("flex-1");
 
-const alertTitleVariants = cva("font-bold mb-1 text-[15px]");
+const alertTitleVariants = cva("font-bold mb-1 text-base");
 
 const alertBodyVariants = cva("text-sm leading-normal");
 

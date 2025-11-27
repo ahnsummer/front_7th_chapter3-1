@@ -94,7 +94,7 @@ export const ManagementPage: React.FC = () => {
           description="사용자와 게시글을 관리하세요"
         />
 
-        <div className="bg-white dark:bg-gray-50 border border-gray-300 dark:border-gray-200 p-2.5">
+        <div className="bg-background dark:bg-gray-50 border border-gray-300 dark:border-gray-200 p-2.5">
           <EntityTabs
             entityType={entityType}
             onEntityTypeChange={entityManager.withFormReset(setEntityType)}
@@ -121,7 +121,7 @@ export const ManagementPage: React.FC = () => {
 
             <StatsSection {...stats} />
 
-            <div className="border border-gray-300 dark:border-gray-200 bg-white dark:bg-gray-50 overflow-auto">
+            <div className="border border-gray-300 dark:border-gray-200 bg-background dark:bg-gray-50 overflow-auto">
               {entityType === "user" ? (
                 <Table
                   columns={getUserColumns({

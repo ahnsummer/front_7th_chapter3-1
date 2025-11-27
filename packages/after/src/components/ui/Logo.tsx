@@ -13,7 +13,7 @@ const logoTitleVariants = cva(
 );
 
 const logoSubtitleVariants = cva(
-  "text-[11px] text-gray-700 dark:text-gray-700 m-0 leading-none mt-0.5"
+  "text-xs text-gray-700 dark:text-gray-700 m-0 leading-none mt-0.5"
 );
 
 const Logo = () => {

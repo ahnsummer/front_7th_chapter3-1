@@ -8,7 +8,7 @@ const dialogOverlayVariants = cva(
 );
 
 const dialogContentVariants = cva(
-  "bg-white dark:bg-gray-50 rounded max-h-[90vh] flex flex-col shadow-[0px_11px_15px_-7px_rgba(0,0,0,0.2),0px_24px_38px_3px_rgba(0,0,0,0.14),0px_9px_46px_8px_rgba(0,0,0,0.12)] dark:shadow-[0px_11px_15px_-7px_rgba(0,0,0,0.5),0px_24px_38px_3px_rgba(0,0,0,0.4),0px_9px_46px_8px_rgba(0,0,0,0.3)]",
+  "bg-white dark:bg-gray-50 rounded-xl max-h-[90vh] flex flex-col shadow-xl dark:shadow-xl",
   {
     variants: {
       size: {
