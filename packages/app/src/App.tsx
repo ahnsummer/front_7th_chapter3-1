@@ -12,11 +12,11 @@ export const App: React.FC = () => {
     <div className="min-h-screen bg-gray-100 dark:bg-background">
       <div className="relative">
         <Header />
-        <div className="fixed top-4 right-4 z-[60]">
+        <div className="fixed top-2 right-2 sm:top-3 sm:right-3 md:top-3 md:right-3 lg:top-4 lg:right-4 z-[60]">
           <DarkModeToggle />
         </div>
       </div>
-      <main>
+      <main className="pt-14 sm:pt-0">
         <ManagementPage />
       </main>
     </div>

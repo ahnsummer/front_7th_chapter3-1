@@ -22,7 +22,7 @@ export const StatsSection: React.FC<StatsSectionProps> = ({
   stat4,
 }) => {
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,minmax(130px,1fr))] gap-2.5 mb-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-2.5 mb-4">
       <StatCard label="전체" value={total} variant="info" />
       <StatCard label={stat1.label} value={stat1.value} variant="success" />
       <StatCard label={stat2.label} value={stat2.value} variant="warning" />

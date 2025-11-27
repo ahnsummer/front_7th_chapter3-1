@@ -94,7 +94,9 @@ describe("Header", () => {
       render(<Header />);
       // "L" 텍스트를 감싸는 div를 직접 찾기
       const logoIcon = screen.getByText("L");
-      expect(logoIcon).toHaveClass("w-10 h-10 bg-primary rounded-lg");
+      expect(logoIcon).toHaveClass("bg-primary rounded-lg");
+      expect(logoIcon.className).toMatch(/w-8|w-10/);
+      expect(logoIcon.className).toMatch(/h-8|h-10/);
     });
 
     it("회사명에 올바른 스타일을 적용한다", () => {
@@ -102,8 +104,9 @@ describe("Header", () => {
       const companyName = screen.getByText("Hanghae Company");
       expect(companyName.tagName).toBe("H1");
       expect(companyName).toHaveClass(
-        "text-lg font-bold text-gray-900 m-0 leading-none"
+        "font-bold text-gray-900 m-0 leading-none"
       );
+      expect(companyName.className).toMatch(/text-base|text-lg/);
     });
 
     it("부제목에 올바른 스타일을 적용한다", () => {
@@ -133,8 +136,11 @@ describe("Header", () => {
       render(<Header />);
       const avatar = screen.getByText("DU");
       expect(avatar).toHaveClass(
-        "w-10 h-10 rounded-full bg-info-light flex items-center justify-center text-primary font-semibold text-base"
+        "rounded-full bg-info-light flex items-center justify-center text-primary font-semibold"
       );
+      expect(avatar.className).toMatch(/w-8|w-10/);
+      expect(avatar.className).toMatch(/h-8|h-10/);
+      expect(avatar.className).toMatch(/text-sm|text-base/);
     });
   });
 
@@ -143,8 +149,10 @@ describe("Header", () => {
       const { container } = render(<Header />);
       const innerDiv = container.querySelector("header > div");
       expect(innerDiv).toHaveClass(
-        "max-w-[1400px] mx-auto px-6 flex justify-between items-center h-16"
+        "max-w-[1400px] mx-auto flex justify-between items-center"
       );
+      expect(innerDiv?.className).toMatch(/px-3|px-6/);
+      expect(innerDiv?.className).toMatch(/h-14|h-16/);
     });
   });
 

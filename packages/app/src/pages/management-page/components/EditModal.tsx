@@ -45,15 +45,15 @@ export const EditModal: React.FC<EditModalProps> = ({
   return (
     <Dialog size="lg" isOpen={isOpen} onClose={onClose}>
       <DialogHeader>
-        <DialogTitle>{`${
+        <DialogTitle className="text-lg sm:text-xl">{`${
           entityType === "user" ? "사용자" : "게시글"
         } 수정`}</DialogTitle>
         <DialogClose onClick={onClose} />
       </DialogHeader>
       <DialogBody>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3 sm:gap-4">
           {selectedItem && (
-            <Alert variant="info">
+            <Alert variant="info" className="text-xs sm:text-sm break-words">
               ID: {selectedItem.id} | 생성일: {selectedItem.createdAt}
               {entityType === "post" &&
                 ` | 조회수: ${(selectedItem as Post).views}`}
@@ -77,11 +77,19 @@ export const EditModal: React.FC<EditModalProps> = ({
           )}
         </div>
       </DialogBody>
-      <DialogFooter>
-        <Button variant="secondary" size="md" onClick={onClose}>
+      <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-2">
+        <Button 
+          variant="secondary" 
+          size="md" 
+          onClick={onClose}
+          className="w-full sm:w-auto order-2 sm:order-1 min-h-[44px] sm:min-h-0">
           취소
         </Button>
-        <Button variant="primary" size="md" onClick={onUpdate}>
+        <Button 
+          variant="primary" 
+          size="md" 
+          onClick={onUpdate}
+          className="w-full sm:w-auto order-1 sm:order-2 min-h-[44px] sm:min-h-0">
           수정 완료
         </Button>
       </DialogFooter>

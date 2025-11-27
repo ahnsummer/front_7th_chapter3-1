@@ -1,19 +1,19 @@
 import { cva } from "class-variance-authority";
 
-const logoLayoutVariants = cva("flex items-center gap-3");
+const logoLayoutVariants = cva("flex items-center gap-2 sm:gap-3");
 
 const logoIconVariants = cva(
-  "w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl"
+  "w-8 h-8 sm:w-10 sm:h-10 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-lg sm:text-xl"
 );
 
 const logoTextContainerVariants = cva("");
 
 const logoTitleVariants = cva(
-  "text-lg font-bold text-gray-900 dark:text-gray-900 m-0 leading-none"
+  "text-base sm:text-lg font-bold text-gray-900 dark:text-gray-900 m-0 leading-none"
 );
 
 const logoSubtitleVariants = cva(
-  "text-xs text-gray-700 dark:text-gray-700 m-0 leading-none mt-0.5"
+  "hidden xs:block text-xs text-gray-700 dark:text-gray-700 m-0 leading-none mt-0.5"
 );
 
 const Logo = () => {

@@ -40,13 +40,13 @@ export const CreateModal: React.FC<CreateModalProps> = ({
   return (
     <Dialog size="lg" isOpen={isOpen} onClose={onClose}>
       <DialogHeader>
-        <DialogTitle>
+        <DialogTitle className="text-lg sm:text-xl">
           {`새 ${entityType === "user" ? "사용자" : "게시글"} 만들기`}
         </DialogTitle>
         <DialogClose onClick={onClose} />
       </DialogHeader>
       <DialogBody>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3 sm:gap-4">
           {entityType === "user" ? (
             <UserFormFields
               formData={formData}
@@ -64,11 +64,19 @@ export const CreateModal: React.FC<CreateModalProps> = ({
           )}
         </div>
       </DialogBody>
-      <DialogFooter>
-        <Button variant="secondary" size="md" onClick={onClose}>
+      <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-2">
+        <Button 
+          variant="secondary" 
+          size="md" 
+          onClick={onClose}
+          className="w-full sm:w-auto order-2 sm:order-1 min-h-[44px] sm:min-h-0">
           취소
         </Button>
-        <Button variant="primary" size="md" onClick={onCreate}>
+        <Button 
+          variant="primary" 
+          size="md" 
+          onClick={onCreate}
+          className="w-full sm:w-auto order-1 sm:order-2 min-h-[44px] sm:min-h-0">
           생성
         </Button>
       </DialogFooter>

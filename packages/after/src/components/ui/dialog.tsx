@@ -4,17 +4,17 @@ import { cn } from "@repo/utils";
 import { Button } from "./button";
 
 const dialogOverlayVariants = cva(
-  "fixed top-0 left-0 right-0 bottom-0 bg-black/50 flex items-center justify-center z-1000 p-4"
+  "fixed top-0 left-0 right-0 bottom-0 bg-black/50 flex items-center justify-center z-1000 p-3 sm:p-4"
 );
 
 const dialogContentVariants = cva(
-  "bg-white dark:bg-gray-50 rounded-xl max-h-[90vh] flex flex-col shadow-xl dark:shadow-xl",
+  "bg-white dark:bg-gray-50 rounded-xl sm:rounded-xl max-h-[90vh] flex flex-col shadow-xl dark:shadow-xl",
   {
     variants: {
       size: {
-        sm: "w-full max-w-[400px]",
-        md: "w-full max-w-[600px]",
-        lg: "w-full max-w-[900px]",
+        sm: "w-full max-w-[calc(100vw-2rem)] sm:max-w-[400px]",
+        md: "w-full max-w-[calc(100vw-2rem)] sm:max-w-[600px]",
+        lg: "w-full max-w-[calc(100vw-2rem)] sm:max-w-[900px]",
       },
     },
     defaultVariants: {
@@ -27,7 +27,9 @@ const dialogHeaderVariants = cva(
   "px-6 py-4 border-b border-black/12 dark:border-gray-200 flex justify-between items-center"
 );
 
-const dialogTitleVariants = cva("m-0 text-xl font-medium text-black/87 dark:text-gray-900");
+const dialogTitleVariants = cva(
+  "m-0 text-xl font-medium text-black/87 dark:text-gray-900"
+);
 
 const dialogBodyVariants = cva("px-6 py-6 overflow-y-auto flex-1");
 
@@ -116,7 +118,7 @@ const Dialog = ({
 };
 
 export type DialogBaseProps = {
-  children: React.ReactNode;                                                       
+  children: React.ReactNode;
   className?: string;
 };
 

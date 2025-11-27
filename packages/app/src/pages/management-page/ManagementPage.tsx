@@ -88,23 +88,25 @@ export const ManagementPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-background">
-      <div className="max-w-[1200px] mx-auto p-5">
+      <div className="max-w-[1200px] mx-auto px-3 py-4 sm:px-5 sm:py-5">
         <PageHeader
           title="관리 시스템"
           description="사용자와 게시글을 관리하세요"
         />
 
-        <div className="bg-background dark:bg-gray-50 border border-gray-300 dark:border-gray-200 p-2.5">
+        <div className="bg-background dark:bg-gray-50 border border-gray-300 dark:border-gray-200 p-3 sm:p-4 md:p-2.5">
           <EntityTabs
             entityType={entityType}
             onEntityTypeChange={entityManager.withFormReset(setEntityType)}
           />
 
           <div>
-            <div className="mb-4 text-right">
+            <div className="mb-4">
               <Button
                 variant="primary"
                 size="md"
+                fullWidth
+                className="sm:w-auto"
                 onClick={() => setIsCreateModalOpen(true)}>
                 새로 만들기
               </Button>
@@ -121,7 +123,7 @@ export const ManagementPage: React.FC = () => {
 
             <StatsSection {...stats} />
 
-            <div className="border border-gray-300 dark:border-gray-200 bg-background dark:bg-gray-50 overflow-auto">
+            <div className="border border-gray-300 dark:border-gray-200 bg-background dark:bg-gray-50 overflow-x-auto -mx-3 sm:mx-0">
               {entityType === "user" ? (
                 <Table
                   columns={getUserColumns({

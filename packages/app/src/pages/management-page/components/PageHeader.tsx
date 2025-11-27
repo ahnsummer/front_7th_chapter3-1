@@ -10,11 +10,11 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   description,
 }) => {
   return (
-    <div className="mb-5">
-      <h1 className="text-2xl font-bold mb-1 text-foreground dark:text-foreground">
+    <div className="mb-4 sm:mb-5">
+      <h1 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-1.5 text-foreground dark:text-foreground">
         {title}
       </h1>
-      <p className="text-muted-foreground dark:text-muted-foreground text-sm">{description}</p>
+      <p className="text-muted-foreground dark:text-muted-foreground text-xs sm:text-sm leading-relaxed">{description}</p>
     </div>
   );
 };

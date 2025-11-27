@@ -43,11 +43,11 @@ export const StatCard: React.FC<StatCardProps> = ({
 
   return (
     <div
-      className={`px-4 py-3 ${styles.bg} border ${styles.border} rounded-sm`}>
+      className={`px-3 py-2.5 sm:px-4 sm:py-3 ${styles.bg} border ${styles.border} rounded-sm`}>
       <div className="text-xs text-gray-600 dark:text-gray-600 mb-1">
         {label}
       </div>
-      <div className={`text-2xl font-bold ${styles.text}`}>{value}</div>
+      <div className={`text-xl sm:text-2xl font-bold ${styles.text}`}>{value}</div>
     </div>
   );
 };

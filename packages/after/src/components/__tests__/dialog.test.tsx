@@ -34,8 +34,15 @@ describe("Dialog", () => {
 
     it('기본값으로 size="md"을 적용한다', () => {
       const { container } = render(<Dialog {...defaultProps} />);
-      const content = container.querySelector(".max-w-\\[600px\\]");
+      const content = container.querySelector(
+        ".bg-white.rounded-xl, .dark\\:bg-gray-50"
+      );
       expect(content).toBeInTheDocument();
+      // 반응형 클래스는 미디어 쿼리이므로 className에 포함되어 있는지 확인
+      if (content) {
+        expect(content.className).toContain("max-w-[calc(100vw-2rem)]");
+        expect(content.className).toContain("sm:max-w-[600px]");
+      }
     });
 
     it("title이 없을 때 header를 렌더링하지 않는다", () => {
@@ -82,15 +89,20 @@ describe("Dialog", () => {
 
   describe("size prop", () => {
     it.each([
-      ["sm", "max-w-[400px]"],
-      ["md", "max-w-[600px]"],
-      ["lg", "max-w-[900px]"],
+      ["sm", "sm:max-w-[400px]"],
+      ["md", "sm:max-w-[600px]"],
+      ["lg", "sm:max-w-[900px]"],
     ] as const)("size가 %s일 때 %s 클래스를 적용한다", (size, maxWidth) => {
       const { container } = render(<Dialog {...defaultProps} size={size} />);
       const content = container.querySelector(
-        `.${maxWidth.replace(/[\[\]]/g, "\\$&")}`
+        ".bg-white.rounded-xl, .dark\\:bg-gray-50"
       );
       expect(content).toBeInTheDocument();
+      // 반응형 클래스는 미디어 쿼리이므로 className에 포함되어 있는지 확인
+      if (content) {
+        expect(content.className).toContain("max-w-[calc(100vw-2rem)]");
+        expect(content.className).toContain(maxWidth);
+      }
     });
   });
 
@@ -238,7 +250,9 @@ describe("Dialog", () => {
       // overlay (fixed)
       expect(container.querySelector(".fixed")).toBeInTheDocument();
       // content (bg-white rounded-xl)
-      expect(container.querySelector(".bg-white.rounded-xl")).toBeInTheDocument();
+      expect(
+        container.querySelector(".bg-white.rounded-xl")
+      ).toBeInTheDocument();
       // body (overflow-y-auto)
       expect(container.querySelector(".overflow-y-auto")).toBeInTheDocument();
     });
