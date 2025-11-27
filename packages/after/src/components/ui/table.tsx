@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "@repo/utils";
 import { Button } from "./button";
-import { Badge } from "./badge";
+import { Badge, type BadgeProps } from "./badge";
 
 const tableContainerVariants = cva("overflow-x-auto");
 
@@ -44,21 +44,6 @@ const searchInputVariants = cva(
 
 const paginationContainerVariants = cva("mt-4 flex gap-2 justify-center");
 
-const paginationButtonVariants = cva(
-  "px-3 py-1.5 border border-gray-300 bg-white rounded transition-colors",
-  {
-    variants: {
-      disabled: {
-        true: "cursor-not-allowed opacity-50",
-        false: "cursor-pointer hover:bg-gray-50",
-      },
-    },
-    defaultVariants: {
-      disabled: false,
-    },
-  }
-);
-
 const sortHeaderVariants = cva("flex items-center gap-1", {
   variants: {
     sortable: {
@@ -68,15 +53,15 @@ const sortHeaderVariants = cva("flex items-center gap-1", {
   },
 });
 
-interface Column {
+type Column = {
   key: string;
   header: string;
   width?: string;
   sortable?: boolean;
-}
+};
 
 // 🚨 Bad Practice: UI 컴포넌트가 도메인 타입을 알고 있음
-interface TableProps {
+type TableProps = {
   columns?: Column[];
   data?: any[];
   striped?: boolean;
@@ -94,9 +79,9 @@ interface TableProps {
   onPublish?: (id: number) => void;
   onArchive?: (id: number) => void;
   onRestore?: (id: number) => void;
-}
+};
 
-const Table: React.FC<TableProps> = ({
+const Table = ({
   columns,
   data = [],
   striped = false,
@@ -112,7 +97,7 @@ const Table: React.FC<TableProps> = ({
   onPublish,
   onArchive,
   onRestore,
-}) => {
+}: TableProps) => {
   const [tableData, setTableData] = useState<any[]>(data);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -180,16 +165,54 @@ const Table: React.FC<TableProps> = ({
     // 도메인별 특수 렌더링
     if (entityType === "user") {
       if (columnKey === "role") {
-        return <Badge userRole={value} showIcon />;
+        const badgeProps: Pick<BadgeProps, "variant" | "children"> = {
+          variant: "primary",
+          children: "",
+        };
+
+        switch (value) {
+          case "admin":
+            badgeProps.variant = "danger";
+            badgeProps.children = "관리자";
+            break;
+          case "moderator":
+            badgeProps.variant = "warning";
+            badgeProps.children = "운영자";
+            break;
+          case "user":
+            badgeProps.variant = "primary";
+            badgeProps.children = "사용자";
+            break;
+          case "guest":
+            badgeProps.variant = "secondary";
+            badgeProps.children = "게스트";
+            break;
+        }
+
+        return <Badge {...badgeProps} showIcon />;
       }
       if (columnKey === "status") {
-        const badgeStatus =
-          value === "active"
-            ? "published"
-            : value === "inactive"
-            ? "draft"
-            : "rejected";
-        return <Badge status={badgeStatus} showIcon />;
+        const badgeProps: Pick<BadgeProps, "variant" | "children"> = {
+          variant: "primary",
+          children: "",
+        };
+
+        switch (value) {
+          case "active":
+            badgeProps.variant = "success";
+            badgeProps.children = "게시됨";
+            break;
+          case "inactive":
+            badgeProps.variant = "warning";
+            badgeProps.children = "임시저장";
+            break;
+          default:
+            badgeProps.variant = "danger";
+            badgeProps.children = "거부됨";
+            break;
+        }
+
+        return <Badge {...badgeProps} showIcon />;
       }
       if (columnKey === "lastLogin") {
         return value || "-";
@@ -221,6 +244,7 @@ const Table: React.FC<TableProps> = ({
             : value === "accessibility"
             ? "danger"
             : "secondary";
+
         return (
           <Badge variant={type} pill>
             {value}
@@ -228,7 +252,35 @@ const Table: React.FC<TableProps> = ({
         );
       }
       if (columnKey === "status") {
-        return <Badge status={value} showIcon />;
+        const badgeProps: Pick<BadgeProps, "variant" | "children"> = {
+          variant: "primary",
+          children: "",
+        };
+
+        switch (value) {
+          case "published":
+            badgeProps.variant = "success";
+            badgeProps.children = "게시됨";
+            break;
+          case "draft":
+            badgeProps.variant = "warning";
+            badgeProps.children = "임시저장";
+            break;
+          case "archived":
+            badgeProps.variant = "secondary";
+            badgeProps.children = "보관됨";
+            break;
+          case "pending":
+            badgeProps.variant = "info";
+            badgeProps.children = "대기중";
+            break;
+          case "rejected":
+            badgeProps.variant = "danger";
+            badgeProps.children = "거부됨";
+            break;
+        }
+
+        return <Badge {...badgeProps} showIcon />;
       }
       if (columnKey === "views") {
         return value?.toLocaleString() || "0";
@@ -333,25 +385,23 @@ const Table: React.FC<TableProps> = ({
 
       {totalPages > 1 && (
         <div className={paginationContainerVariants()}>
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+          <Button
+            variant="secondary"
+            size="sm"
             disabled={currentPage === 1}
-            className={cn(
-              paginationButtonVariants({ disabled: currentPage === 1 })
-            )}>
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}>
             이전
-          </button>
+          </Button>
           <span className="px-3 py-1.5">
             {currentPage} / {totalPages}
           </span>
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+          <Button
+            variant="secondary"
+            size="sm"
             disabled={currentPage === totalPages}
-            className={cn(
-              paginationButtonVariants({ disabled: currentPage === totalPages })
-            )}>
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}>
             다음
-          </button>
+          </Button>
         </div>
       )}
     </div>
