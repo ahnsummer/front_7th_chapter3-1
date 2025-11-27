@@ -7,14 +7,55 @@ const meta = {
   component: Checkbox,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component: "체크박스 컴포넌트입니다. Radix UI를 기반으로 하며, Label과 함께 사용하여 접근성을 보장합니다.",
+      },
+    },
+    a11y: {
+      config: {
+        rules: [
+          {
+            id: "label",
+            enabled: true,
+          },
+          {
+            id: "checkbox-name",
+            enabled: true,
+          },
+        ],
+      },
+    },
   },
   tags: ["autodocs"],
   argTypes: {
     checked: {
       control: "boolean",
+      description: "체크 상태",
+      table: {
+        type: { summary: "boolean" },
+      },
     },
     disabled: {
       control: "boolean",
+      description: "비활성화 상태",
+      table: {
+        type: { summary: "boolean" },
+        defaultValue: { summary: false },
+      },
+    },
+    id: {
+      control: "text",
+      description: "checkbox id (Label의 htmlFor와 연결)",
+      table: {
+        type: { summary: "string" },
+      },
+    },
+    onCheckedChange: {
+      description: "체크 상태 변경 시 호출되는 콜백",
+      table: {
+        type: { summary: "(checked: boolean) => void" },
+      },
     },
   },
 } satisfies Meta<typeof Checkbox>;

@@ -6,6 +6,11 @@ const meta = {
   component: Header,
   parameters: {
     layout: "fullscreen",
+    docs: {
+      description: {
+        component: "애플리케이션 상단 헤더 컴포넌트입니다. 로고와 사용자 정보를 표시하며, sticky 속성으로 스크롤 시 상단에 고정됩니다.",
+      },
+    },
   },
   tags: ["autodocs"],
 } satisfies Meta<typeof Header>;
@@ -30,5 +35,12 @@ export const WithContent: Story = {
       </div>
     </div>
   ),
+  parameters: {
+    docs: {
+      description: {
+        story: "스크롤 시 헤더가 상단에 고정되는 것을 확인할 수 있습니다.",
+      },
+    },
+  },
 };
 

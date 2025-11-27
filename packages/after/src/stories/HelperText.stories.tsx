@@ -6,11 +6,28 @@ const meta = {
   component: HelperText,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component: "폼 필드 아래 표시되는 도움말 또는 에러 메시지 컴포넌트입니다.",
+      },
+    },
   },
   tags: ["autodocs"],
   argTypes: {
+    text: {
+      control: "text",
+      description: "표시할 텍스트",
+      table: {
+        type: { summary: "string" },
+      },
+    },
     hasError: {
       control: "boolean",
+      description: "에러 상태 (빨간색으로 표시)",
+      table: {
+        type: { summary: "boolean" },
+        defaultValue: { summary: false },
+      },
     },
   },
 } satisfies Meta<typeof HelperText>;

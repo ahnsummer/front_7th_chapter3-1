@@ -10,12 +10,82 @@ const meta = {
   component: Dialog,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component: "모달 다이얼로그 컴포넌트입니다. 단순 사용과 조립형 사용 두 가지 방식을 지원하며, 배경 클릭으로 닫기, 스크롤 방지 등의 기능을 제공합니다.",
+      },
+    },
+    a11y: {
+      config: {
+        rules: [
+          {
+            id: "aria-dialog-name",
+            enabled: true,
+          },
+          {
+            id: "focus-trap",
+            enabled: true,
+          },
+        ],
+      },
+    },
   },
   tags: ["autodocs"],
   argTypes: {
+    isOpen: {
+      control: "boolean",
+      description: "다이얼로그 표시 여부",
+      table: {
+        type: { summary: "boolean" },
+      },
+    },
+    onClose: {
+      description: "닫기 시 호출되는 콜백 (배경 클릭, ESC 키)",
+      table: {
+        type: { summary: "() => void" },
+      },
+    },
     size: {
       control: "select",
       options: ["sm", "md", "lg"],
+      description: "다이얼로그 크기",
+      table: {
+        type: { summary: "string" },
+        defaultValue: { summary: "md" },
+      },
+    },
+    title: {
+      control: "text",
+      description: "간단한 제목 문자열 (자동으로 헤더 생성)",
+      table: {
+        type: { summary: "string" },
+      },
+    },
+    header: {
+      description: "커스텀 헤더 컨텐츠 (title보다 우선)",
+      table: {
+        type: { summary: "ReactNode" },
+      },
+    },
+    children: {
+      description: "다이얼로그 본문 내용",
+      table: {
+        type: { summary: "ReactNode" },
+      },
+    },
+    showFooter: {
+      control: "boolean",
+      description: "푸터 표시 여부",
+      table: {
+        type: { summary: "boolean" },
+        defaultValue: { summary: false },
+      },
+    },
+    footer: {
+      description: "커스텀 푸터 컨텐츠",
+      table: {
+        type: { summary: "ReactNode" },
+      },
     },
   },
   args: {
@@ -126,6 +196,13 @@ export const ComposableDialog: Story = {
         </Dialog>
       </>
     );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "DialogHeader, DialogTitle, DialogBody, DialogFooter를 조립하여 더 세밀한 제어가 가능합니다.",
+      },
+    },
   },
 };
 

@@ -7,15 +7,64 @@ const meta = {
   component: Alert,
   parameters: {
     layout: "padded",
+    docs: {
+      description: {
+        component: "사용자에게 중요한 정보를 전달하는 Alert 컴포넌트입니다. 다양한 variant와 닫기 기능을 제공합니다.",
+      },
+    },
+    a11y: {
+      config: {
+        rules: [
+          {
+            id: "aria-roles",
+            enabled: true,
+          },
+          {
+            id: "color-contrast",
+            enabled: true,
+          },
+        ],
+      },
+    },
   },
   tags: ["autodocs"],
   argTypes: {
     variant: {
       control: "select",
       options: ["primary", "info", "success", "warning", "danger"],
+      description: "Alert의 색상 및 의미를 나타내는 variant",
+      table: {
+        type: { summary: "string" },
+        defaultValue: { summary: "primary" },
+      },
+    },
+    title: {
+      control: "text",
+      description: "Alert 제목 (선택사항)",
+      table: {
+        type: { summary: "string" },
+      },
+    },
+    children: {
+      control: "text",
+      description: "Alert 메시지 내용",
+      table: {
+        type: { summary: "ReactNode" },
+      },
     },
     showIcon: {
       control: "boolean",
+      description: "variant에 따른 아이콘 표시 여부",
+      table: {
+        type: { summary: "boolean" },
+        defaultValue: { summary: true },
+      },
+    },
+    onClose: {
+      description: "닫기 버튼 클릭 시 호출되는 콜백 (제공 시 닫기 버튼 표시)",
+      table: {
+        type: { summary: "() => void" },
+      },
     },
   },
   args: {

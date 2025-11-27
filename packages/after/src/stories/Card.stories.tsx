@@ -7,8 +7,28 @@ const meta = {
   component: Card,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component: "콘텐츠를 그룹화하는 카드 컴포넌트입니다. CardHeader, CardTitle, CardDescription, CardContent, CardFooter를 조합하여 사용합니다.",
+      },
+    },
   },
   tags: ["autodocs"],
+  argTypes: {
+    children: {
+      description: "카드 내용 (조립형 컴포넌트 사용 권장)",
+      table: {
+        type: { summary: "ReactNode" },
+      },
+    },
+    className: {
+      control: "text",
+      description: "추가 CSS 클래스",
+      table: {
+        type: { summary: "string" },
+      },
+    },
+  },
 } satisfies Meta<typeof Card>;
 
 export default meta;
