@@ -402,160 +402,65 @@ describe("Table", () => {
     });
   });
 
-  describe("entityType - user", () => {
-    const userData = [
-      { id: 1, name: "John", role: "admin", status: "active" },
-      { id: 2, name: "Jane", role: "user", status: "inactive" },
-    ];
-
-    it("role column을 Badge로 렌더링한다", () => {
-      const { container } = render(<Table data={userData} entityType="user" />);
-      // Badge가 bg-* 클래스를 가지는지 확인
-      const badges = container.querySelectorAll("[class*='bg-']");
-      expect(badges.length).toBeGreaterThan(0);
-    });
-
-    it("actions column에 수정/삭제 버튼을 렌더링한다", () => {
-      const dataWithActions = [{ id: 1, name: "John", actions: null }];
-      const onEdit = vi.fn();
-      const onDelete = vi.fn();
-
-      render(
-        <Table
-          data={dataWithActions}
-          entityType="user"
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
-      );
-
-      expect(screen.getAllByText("수정")).toHaveLength(1);
-      expect(screen.getAllByText("삭제")).toHaveLength(1);
-    });
-
-    it("수정 버튼 클릭 시 onEdit이 호출된다", async () => {
-      const dataWithActions = [{ id: 1, name: "John", actions: null }];
-      const onEdit = vi.fn();
-      const user = userEvent.setup();
-
-      render(
-        <Table data={dataWithActions} entityType="user" onEdit={onEdit} />
-      );
-
-      await user.click(screen.getByText("수정"));
-      expect(onEdit).toHaveBeenCalledWith(dataWithActions[0]);
-    });
-
-    it("삭제 버튼 클릭 시 onDelete가 호출된다", async () => {
-      const dataWithActions = [{ id: 1, name: "John", actions: null }];
-      const onDelete = vi.fn();
-      const user = userEvent.setup();
-
-      render(
-        <Table data={dataWithActions} entityType="user" onDelete={onDelete} />
-      );
-
-      await user.click(screen.getByText("삭제"));
-      expect(onDelete).toHaveBeenCalledWith(1);
-    });
-  });
-
-  describe("entityType - post", () => {
-    const postData = [
-      {
-        id: 1,
-        title: "Post 1",
-        category: "development",
-        status: "draft",
-        views: 100,
-        actions: null,
-      },
-      {
-        id: 2,
-        title: "Post 2",
-        category: "design",
-        status: "published",
-        views: 1000,
-        actions: null,
-      },
-      {
-        id: 3,
-        title: "Post 3",
-        category: "accessibility",
-        status: "archived",
-        views: 500,
-        actions: null,
-      },
-    ];
-
-    it("category column을 Badge로 렌더링한다", () => {
-      render(<Table data={postData} entityType="post" />);
-      // category 값이 표시되는지 확인
-      expect(screen.getByText("development")).toBeInTheDocument();
-      expect(screen.getByText("design")).toBeInTheDocument();
-      expect(screen.getByText("accessibility")).toBeInTheDocument();
-    });
-
-    it("status column을 Badge로 렌더링한다", () => {
-      const { container } = render(<Table data={postData} entityType="post" />);
-      // Badge가 렌더링되는지 확인 (bg-* 클래스)
-      const badges = container.querySelectorAll("[class*='bg-']");
-      expect(badges.length).toBeGreaterThan(0);
-    });
-
-    it("views를 숫자 포맷으로 렌더링한다", () => {
-      render(<Table data={postData} entityType="post" />);
-      expect(screen.getByText("100")).toBeInTheDocument();
-      expect(screen.getByText("1,000")).toBeInTheDocument();
-      expect(screen.getByText("500")).toBeInTheDocument();
-    });
-
-    it("draft 상태의 게시글에 게시 버튼을 표시한다", () => {
-      render(<Table data={postData} entityType="post" onPublish={vi.fn()} />);
-      expect(screen.getAllByText("게시")).toHaveLength(1);
-    });
-
-    it("published 상태의 게시글에 보관 버튼을 표시한다", () => {
-      render(<Table data={postData} entityType="post" onArchive={vi.fn()} />);
-      expect(screen.getAllByText("보관")).toHaveLength(1);
-    });
-
-    it("archived 상태의 게시글에 복원 버튼을 표시한다", () => {
-      render(<Table data={postData} entityType="post" onRestore={vi.fn()} />);
-      expect(screen.getAllByText("복원")).toHaveLength(1);
-    });
-
-    it("게시 버튼 클릭 시 onPublish가 호출된다", async () => {
-      const onPublish = vi.fn();
-      const user = userEvent.setup();
-
-      render(<Table data={postData} entityType="post" onPublish={onPublish} />);
-
-      const publishButtons = screen.getAllByText("게시");
-      await user.click(publishButtons[0]);
-      expect(onPublish).toHaveBeenCalledWith(1);
-    });
-
-    it("모든 게시글에 수정/삭제 버튼을 표시한다", () => {
-      render(
-        <Table
-          data={postData}
-          entityType="post"
-          onEdit={vi.fn()}
-          onDelete={vi.fn()}
-        />
-      );
-      expect(screen.getAllByText("수정")).toHaveLength(3);
-      expect(screen.getAllByText("삭제")).toHaveLength(3);
-    });
-
-    it("알 수 없는 category 값은 secondary variant로 렌더링한다", () => {
-      const dataWithUnknownCategory = [
-        { id: 1, category: "unknown", actions: null },
+  describe("render 함수를 통한 커스텀 렌더링", () => {
+    it("column에 render 함수가 있으면 해당 함수로 렌더링한다", () => {
+      const columnsWithRender = [
+        { key: "id", header: "ID" },
+        {
+          key: "name",
+          header: "Name",
+          render: (row: any) => <strong>{row.name}</strong>,
+        },
       ];
-      render(<Table data={dataWithUnknownCategory} entityType="post" />);
-      expect(screen.getByText("unknown")).toBeInTheDocument();
-      // Badge로 렌더링되면 충분
+      render(<Table data={mockData} columns={columnsWithRender} />);
+      const boldName = screen.getByText("John");
+      expect(boldName.tagName).toBe("STRONG");
+    });
+
+    it("render 함수가 없으면 기본값으로 렌더링한다", () => {
+      const columnsWithRender = [
+        { key: "id", header: "ID" },
+        { key: "name", header: "Name" },
+      ];
+      render(<Table data={mockData} columns={columnsWithRender} />);
+      expect(screen.getByText("John")).toBeInTheDocument();
+    });
+
+    it("render 함수에서 버튼을 렌더링할 수 있다", async () => {
+      const handleClick = vi.fn();
+      const user = userEvent.setup();
+      const columnsWithAction = [
+        { key: "name", header: "Name" },
+        {
+          key: "action",
+          header: "Action",
+          render: (row: any) => (
+            <button onClick={() => handleClick(row)}>클릭</button>
+          ),
+        },
+      ];
+      render(<Table data={mockData} columns={columnsWithAction} />);
+      
+      const buttons = screen.getAllByText("클릭");
+      await user.click(buttons[0]);
+      expect(handleClick).toHaveBeenCalledWith(mockData[0]);
+    });
+
+    it("render 함수에서 복잡한 JSX를 렌더링할 수 있다", () => {
+      const columnsWithComplex = [
+        {
+          key: "info",
+          header: "Info",
+          render: (row: any) => (
+            <div>
+              <span>{row.name}</span> - <span>{row.age}세</span>
+            </div>
+          ),
+        },
+      ];
+      render(<Table data={mockData} columns={columnsWithComplex} />);
+      expect(screen.getByText(/John/)).toBeInTheDocument();
+      expect(screen.getByText(/30세/)).toBeInTheDocument();
     });
   });
 
@@ -567,14 +472,6 @@ describe("Table", () => {
       render(<Table data={dataWithElement} />);
       expect(screen.getByText("Bold Name")).toBeInTheDocument();
       expect(screen.getByText("Bold Name").tagName).toBe("STRONG");
-    });
-
-    it("entityType이 있어도 React Element는 그대로 렌더링한다", () => {
-      const dataWithElement = [
-        { id: 1, customColumn: <div data-testid="custom">Custom</div> },
-      ];
-      render(<Table data={dataWithElement} entityType="user" />);
-      expect(screen.getByTestId("custom")).toBeInTheDocument();
     });
   });
 
@@ -633,15 +530,31 @@ describe("Table", () => {
       expect(screen.getByRole("table")).toBeInTheDocument();
     });
 
-    it('views가 없을 때 "0"을 표시한다', () => {
+    it("render 함수에서 undefined 값을 처리할 수 있다", () => {
       const dataWithNoViews = [{ id: 1, views: undefined }];
-      render(<Table data={dataWithNoViews} entityType="post" />);
+      const columnsWithRender = [
+        { key: "id", header: "ID" },
+        {
+          key: "views",
+          header: "Views",
+          render: (row: any) => row.views?.toLocaleString() || "0",
+        },
+      ];
+      render(<Table data={dataWithNoViews} columns={columnsWithRender} />);
       expect(screen.getByText("0")).toBeInTheDocument();
     });
 
-    it('lastLogin이 없을 때 "-"를 표시한다', () => {
+    it("render 함수에서 null 값을 처리할 수 있다", () => {
       const dataWithNoLogin = [{ id: 1, lastLogin: null }];
-      render(<Table data={dataWithNoLogin} entityType="user" />);
+      const columnsWithRender = [
+        { key: "id", header: "ID" },
+        {
+          key: "lastLogin",
+          header: "Last Login",
+          render: (row: any) => row.lastLogin || "-",
+        },
+      ];
+      render(<Table data={dataWithNoLogin} columns={columnsWithRender} />);
       expect(screen.getByText("-")).toBeInTheDocument();
     });
   });

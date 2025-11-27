@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import Header from "../ui/header";
+import { Header } from "../ui/header";
 
 describe("Header", () => {
   describe("기본 렌더링", () => {

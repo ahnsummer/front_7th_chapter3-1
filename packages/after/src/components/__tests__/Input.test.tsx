@@ -191,365 +191,55 @@ describe("Input", () => {
     });
   });
 
-  describe("fieldType - username 검증", () => {
-    it("username 필드에 3자 미만 입력 시 에러를 표시한다", async () => {
+  describe("onValidate prop", () => {
+    it("입력 시 onValidate가 호출된다", async () => {
+      const handleValidate = vi.fn().mockReturnValue(undefined);
       const user = userEvent.setup();
-      render(<Input {...defaultProps} fieldType="username" />);
+      render(<Input {...defaultProps} onValidate={handleValidate} />);
 
-      await user.type(screen.getByRole("textbox"), "ab");
-      await waitFor(() => {
-        expect(
-          screen.getByText("사용자명은 3자 이상이어야 합니다")
-        ).toBeInTheDocument();
-      });
+      await user.type(screen.getByRole("textbox"), "test");
+      expect(handleValidate).toHaveBeenCalledTimes(4);
+      // userEvent.type은 한 글자씩 입력: 't', 'e', 's', 't'
+      expect(handleValidate).toHaveBeenNthCalledWith(1, "t");
+      expect(handleValidate).toHaveBeenNthCalledWith(2, "e");
+      expect(handleValidate).toHaveBeenNthCalledWith(3, "s");
+      expect(handleValidate).toHaveBeenNthCalledWith(4, "t");
     });
 
-    it("username 필드에 유효하지 않은 문자 입력 시 에러를 표시한다", async () => {
+    it("onValidate가 에러를 반환하면 표시되지 않는다 (외부 error prop 사용)", async () => {
+      const handleValidate = vi.fn().mockReturnValue("검증 실패");
       const user = userEvent.setup();
-      render(<Input {...defaultProps} fieldType="username" />);
-
-      const input = screen.getByRole("textbox");
-      await user.clear(input);
-      await user.paste("user@name");
-
-      await waitFor(() => {
-        expect(
-          screen.getByText("영문, 숫자, 언더스코어만 사용 가능합니다")
-        ).toBeInTheDocument();
-      });
-    });
-
-    it("username 필드에 20자 초과 입력 시 에러를 표시한다", async () => {
-      const user = userEvent.setup();
-      render(<Input {...defaultProps} fieldType="username" />);
-
-      const input = screen.getByRole("textbox");
-      await user.clear(input);
-      await user.paste("a".repeat(21));
-
-      await waitFor(() => {
-        expect(
-          screen.getByText("사용자명은 20자 이하여야 합니다")
-        ).toBeInTheDocument();
-      });
-    });
-
-    it("checkBusinessRules가 true일 때 예약어를 체크한다", async () => {
-      const user = userEvent.setup();
-      render(
-        <Input
-          {...defaultProps}
-          fieldType="username"
-          checkBusinessRules={true}
-        />
-      );
-
-      const input = screen.getByRole("textbox");
-      await user.clear(input);
-      await user.paste("admin");
-
-      await waitFor(() => {
-        expect(screen.getByText("예약된 사용자명입니다")).toBeInTheDocument();
-      });
-    });
-
-    it("checkBusinessRules가 false일 때 예약어를 허용한다", async () => {
-      const user = userEvent.setup();
-      render(
-        <Input
-          {...defaultProps}
-          fieldType="username"
-          checkBusinessRules={false}
-        />
-      );
-
-      await user.type(screen.getByRole("textbox"), "admin");
-      await waitFor(() => {
-        expect(
-          screen.queryByText("예약된 사용자명입니다")
-        ).not.toBeInTheDocument();
-      });
-    });
-
-    it.each(["admin", "root", "system", "administrator"])(
-      '예약어 "%s"를 체크한다',
-      async (reservedWord) => {
-        const user = userEvent.setup();
-        render(
-          <Input
-            {...defaultProps}
-            fieldType="username"
-            checkBusinessRules={true}
-          />
-        );
-
-        const input = screen.getByRole("textbox");
-        await user.clear(input);
-        await user.paste(reservedWord);
-
-        await waitFor(() => {
-          expect(screen.getByText("예약된 사용자명입니다")).toBeInTheDocument();
-        });
-      }
-    );
-
-    it("유효한 username을 입력하면 에러가 없다", async () => {
-      const user = userEvent.setup();
-      render(<Input {...defaultProps} fieldType="username" />);
-
-      const input = screen.getByRole("textbox");
-      await user.clear(input);
-      await user.paste("valid_user123");
-
-      await waitFor(() => {
-        expect(screen.queryByText(/사용자명/)).not.toBeInTheDocument();
-      });
-    });
-  });
-
-  describe("fieldType - email 검증", () => {
-    it("유효하지 않은 이메일 형식에 대해 에러를 표시한다", async () => {
-      const user = userEvent.setup();
-      render(<Input {...defaultProps} fieldType="email" />);
-
-      await user.type(screen.getByRole("textbox"), "invalid-email");
-      await waitFor(() => {
-        expect(
-          screen.getByText("올바른 이메일 형식이 아닙니다")
-        ).toBeInTheDocument();
-      });
-    });
-
-    it("checkBusinessRules가 true이고 entityType이 user일 때 회사 도메인을 체크한다", async () => {
-      const user = userEvent.setup();
-      render(
-        <Input
-          {...defaultProps}
-          fieldType="email"
-          entityType="user"
-          checkBusinessRules={true}
-        />
-      );
-
-      await user.type(screen.getByRole("textbox"), "user@gmail.com");
-      await waitFor(() => {
-        expect(
-          screen.getByText(
-            "회사 이메일(@company.com 또는 @example.com)만 사용 가능합니다"
-          )
-        ).toBeInTheDocument();
-      });
-    });
-
-    it("회사 도메인 이메일은 허용한다 - @company.com", async () => {
-      const user = userEvent.setup();
-      render(
-        <Input
-          {...defaultProps}
-          fieldType="email"
-          entityType="user"
-          checkBusinessRules={true}
-        />
-      );
-
-      const input = screen.getByRole("textbox");
-      await user.clear(input);
-      await user.paste("user@company.com");
-
-      await waitFor(() => {
-        expect(screen.queryByText(/회사 이메일/)).not.toBeInTheDocument();
-      });
-    });
-
-    it("회사 도메인 이메일은 허용한다 - @example.com", async () => {
-      const user = userEvent.setup();
-      render(
-        <Input
-          {...defaultProps}
-          fieldType="email"
-          entityType="user"
-          checkBusinessRules={true}
-        />
-      );
-
-      const input = screen.getByRole("textbox");
-      await user.clear(input);
-      await user.paste("user@example.com");
-
-      await waitFor(() => {
-        expect(screen.queryByText(/회사 이메일/)).not.toBeInTheDocument();
-      });
-    });
-
-    it("checkBusinessRules가 false일 때 도메인 제한이 없다", async () => {
-      const user = userEvent.setup();
-      render(
-        <Input
-          {...defaultProps}
-          fieldType="email"
-          entityType="user"
-          checkBusinessRules={false}
-        />
-      );
-
-      await user.type(screen.getByRole("textbox"), "user@gmail.com");
-      await waitFor(() => {
-        expect(screen.queryByText(/회사 이메일/)).not.toBeInTheDocument();
-      });
-    });
-  });
-
-  describe("fieldType - postTitle 검증", () => {
-    it("제목이 5자 미만일 때 에러를 표시한다", async () => {
-      const user = userEvent.setup();
-      render(<Input {...defaultProps} fieldType="postTitle" />);
-
-      const input = screen.getByRole("textbox");
-      await user.clear(input);
-      await user.paste("짧음");
-
-      await waitFor(() => {
-        expect(
-          screen.getByText("제목은 5자 이상이어야 합니다")
-        ).toBeInTheDocument();
-      });
-    });
-
-    it("제목이 100자 초과일 때 에러를 표시한다", async () => {
-      const user = userEvent.setup();
-      render(<Input {...defaultProps} fieldType="postTitle" />);
-
-      const input = screen.getByRole("textbox");
-      await user.clear(input);
-      await user.paste("a".repeat(101));
-
-      await waitFor(() => {
-        expect(
-          screen.getByText("제목은 100자 이하여야 합니다")
-        ).toBeInTheDocument();
-      });
-    });
-
-    it("checkBusinessRules가 true이고 entityType이 post일 때 금칙어를 체크한다", async () => {
-      const user = userEvent.setup();
-      render(
-        <Input
-          {...defaultProps}
-          fieldType="postTitle"
-          entityType="post"
-          checkBusinessRules={true}
-        />
-      );
-
-      const input = screen.getByRole("textbox");
-      await user.clear(input);
-      await user.paste("이것은 광고입니다");
-
-      await waitFor(() => {
-        expect(
-          screen.getByText("제목에 금지된 단어가 포함되어 있습니다")
-        ).toBeInTheDocument();
-      });
-    });
-
-    it.each(["광고", "스팸", "홍보"])(
-      '금칙어 "%s"를 체크한다',
-      async (bannedWord) => {
-        const user = userEvent.setup();
-        render(
-          <Input
-            {...defaultProps}
-            fieldType="postTitle"
-            entityType="post"
-            checkBusinessRules={true}
-          />
-        );
-
-        const input = screen.getByRole("textbox");
-        await user.clear(input);
-        await user.paste(`테스트 ${bannedWord} 제목`);
-
-        await waitFor(() => {
-          expect(
-            screen.getByText("제목에 금지된 단어가 포함되어 있습니다")
-          ).toBeInTheDocument();
-        });
-      }
-    );
-
-    it("유효한 제목을 입력하면 에러가 없다", async () => {
-      const user = userEvent.setup();
-      render(
-        <Input
-          {...defaultProps}
-          fieldType="postTitle"
-          entityType="post"
-          checkBusinessRules={true}
-        />
-      );
-
-      const input = screen.getByRole("textbox");
-      await user.clear(input);
-      await user.paste("정상적인 게시글 제목입니다");
-
-      await waitFor(() => {
-        expect(
-          screen.queryByText("제목은 5자 이상이어야 합니다")
-        ).not.toBeInTheDocument();
-        expect(
-          screen.queryByText("제목은 100자 이하여야 합니다")
-        ).not.toBeInTheDocument();
-        expect(
-          screen.queryByText("제목에 금지된 단어가 포함되어 있습니다")
-        ).not.toBeInTheDocument();
-      });
-    });
-  });
-
-  describe("fieldType - normal", () => {
-    it("normal 필드는 검증을 하지 않는다", async () => {
-      const user = userEvent.setup();
-      render(<Input {...defaultProps} fieldType="normal" />);
+      render(<Input {...defaultProps} onValidate={handleValidate} />);
 
       await user.type(screen.getByRole("textbox"), "x");
-      expect(screen.queryByText(/error/i)).not.toBeInTheDocument();
+      expect(handleValidate).toHaveBeenCalled();
+      // onValidate 자체는 에러를 표시하지 않고, 외부에서 error prop으로 전달해야 함
     });
-  });
 
-  describe("내부 에러와 외부 에러", () => {
-    it("외부 error prop이 내부 검증 에러보다 우선한다", async () => {
+    it("onValidate와 onChange가 모두 호출된다", async () => {
+      const handleChange = vi.fn();
+      const handleValidate = vi.fn();
       const user = userEvent.setup();
       render(
-        <Input {...defaultProps} fieldType="username" error="외부 에러" />
+        <Input
+          {...defaultProps}
+          onChange={handleChange}
+          onValidate={handleValidate}
+        />
       );
 
-      await user.type(screen.getByRole("textbox"), "ab");
-      expect(screen.getByText("외부 에러")).toBeInTheDocument();
-      expect(
-        screen.queryByText("사용자명은 3자 이상이어야 합니다")
-      ).not.toBeInTheDocument();
+      await user.type(screen.getByRole("textbox"), "abc");
+      expect(handleChange).toHaveBeenCalledTimes(3);
+      expect(handleValidate).toHaveBeenCalledTimes(3);
     });
 
-    it("외부 error가 없을 때 내부 검증 에러를 표시한다", async () => {
+    it("onValidate 없이도 정상 작동한다", async () => {
+      const handleChange = vi.fn();
       const user = userEvent.setup();
-      render(<Input {...defaultProps} fieldType="username" />);
+      render(<Input {...defaultProps} onChange={handleChange} />);
 
-      await user.type(screen.getByRole("textbox"), "ab");
-      await waitFor(() => {
-        expect(
-          screen.getByText("사용자명은 3자 이상이어야 합니다")
-        ).toBeInTheDocument();
-      });
-    });
-  });
-
-  describe("빈 값 처리", () => {
-    it("빈 값 입력 시 검증을 하지 않는다", async () => {
-      const user = userEvent.setup();
-      render(<Input {...defaultProps} fieldType="username" value="abc" />);
-
-      await user.clear(screen.getByRole("textbox"));
-      expect(screen.queryByText(/사용자명/)).not.toBeInTheDocument();
+      await user.type(screen.getByRole("textbox"), "test");
+      expect(handleChange).toHaveBeenCalled();
     });
   });
 
